@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EscapeRoom", "EscapeRoom.csproj", "{c4c35276-8943-d4c4-5ecc-23aebbe0db02}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests.csproj", "{c3f1aaad-f8e3-c14e-95c0-cb5d35f7ad42}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{c4c35276-8943-d4c4-5ecc-23aebbe0db02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{c4c35276-8943-d4c4-5ecc-23aebbe0db02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{c4c35276-8943-d4c4-5ecc-23aebbe0db02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{c4c35276-8943-d4c4-5ecc-23aebbe0db02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{c3f1aaad-f8e3-c14e-95c0-cb5d35f7ad42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{c3f1aaad-f8e3-c14e-95c0-cb5d35f7ad42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{c3f1aaad-f8e3-c14e-95c0-cb5d35f7ad42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{c3f1aaad-f8e3-c14e-95c0-cb5d35f7ad42}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
