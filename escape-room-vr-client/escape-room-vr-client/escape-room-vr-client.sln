@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EscapeRoom", "EscapeRoom.cs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests.csproj", "{c3f1aaad-f8e3-c14e-95c0-cb5d35f7ad42}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControllerSample", "ControllerSample.csproj", "{be84dc8f-da0c-6176-bf2c-cffacec98dae}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{c3f1aaad-f8e3-c14e-95c0-cb5d35f7ad42}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{c3f1aaad-f8e3-c14e-95c0-cb5d35f7ad42}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{c3f1aaad-f8e3-c14e-95c0-cb5d35f7ad42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{be84dc8f-da0c-6176-bf2c-cffacec98dae}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{be84dc8f-da0c-6176-bf2c-cffacec98dae}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{be84dc8f-da0c-6176-bf2c-cffacec98dae}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{be84dc8f-da0c-6176-bf2c-cffacec98dae}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

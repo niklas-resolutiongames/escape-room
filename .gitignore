@@ -4,3 +4,4 @@ escape-room-vr-client/Library
 Temp
 Logs
 obj
+**/InitTestScene*.unity*

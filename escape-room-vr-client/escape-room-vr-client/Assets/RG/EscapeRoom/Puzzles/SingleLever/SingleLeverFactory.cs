@@ -14,6 +14,7 @@ public class SingleLeverFactory: PuzzleFactory
     public Puzzle CreatePuzzle(PuzzleDefinition puzzleDefinition)
     {
         var gameObject = Object.Instantiate(singleLeverSettings.prefab);
+        gameObject.transform.SetPositionAndRotation(puzzleDefinition.position, puzzleDefinition.rotation);
         return new Puzzle(gameObject);
     }
 }

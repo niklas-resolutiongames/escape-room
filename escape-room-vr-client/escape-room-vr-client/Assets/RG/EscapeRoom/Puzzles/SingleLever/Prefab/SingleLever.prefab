@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 617802595632703871}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8785072044487467098}
@@ -93,6 +93,7 @@ GameObject:
   - component: {fileID: 1869039814591850787}
   - component: {fileID: 6998272531701492160}
   - component: {fileID: 6300077766617818673}
+  - component: {fileID: 3816050018835932392}
   m_Layer: 0
   m_Name: LeverEnd
   m_TagString: Untagged
@@ -163,6 +164,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!135 &3816050018835932392
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3392140696949509096}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.00020000001
+  m_Center: {x: -0.002, y: -7.275958e-12, z: 0}
 --- !u!1 &4492766427788355840
 GameObject:
   m_ObjectHideFlags: 0

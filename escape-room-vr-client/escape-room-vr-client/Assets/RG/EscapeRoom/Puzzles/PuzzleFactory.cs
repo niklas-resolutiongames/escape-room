@@ -7,7 +7,8 @@ public interface PuzzleFactory
 
 public struct PuzzleDefinition
 {
-    
+    public Vector3 position;
+    public Quaternion rotation;
 }
 
 public class Puzzle
