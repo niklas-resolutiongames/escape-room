@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57b4eacc5bfe484ca7ca0748ee313f38, type: 3}
   m_Name: SingleLeverSettings
   m_EditorClassIdentifier: 
-  prefab: {fileID: 919132149155446097, guid: 0aa692e8f6859f046a1b8714e8dd8f17, type: 3}
+  prefab: {fileID: 617802595632703871, guid: 49f751733feaccb4cb0566512467c174, type: 3}

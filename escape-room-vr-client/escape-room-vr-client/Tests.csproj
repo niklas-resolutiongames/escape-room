@@ -52,8 +52,8 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets\RG\Tests\SingleLever\SingleLeverFactoryTest.cs" />
      <Compile Include="Assets\RG\Tests\TestMotionHelper.cs" />
+     <Compile Include="Assets\RG\Tests\SingleLever\SingleLeverFactoryTest.cs" />
      <None Include="Assets\RG\Tests\Tests.asmdef" />
  <Reference Include="UnityEngine">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2020.3.24f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>

@@ -52,15 +52,15 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets\Samples\OpenXR Plugin\1.2.8\Controller\Scripts\ActionAssetEnabler.cs" />
-     <Compile Include="Assets\Samples\OpenXR Plugin\1.2.8\Controller\Scripts\ActionToSliderISX.cs" />
-     <Compile Include="Assets\Samples\OpenXR Plugin\1.2.8\Controller\Scripts\DisplayDeviceInfoFromActionISX.cs" />
-     <Compile Include="Assets\Samples\OpenXR Plugin\1.2.8\Controller\Scripts\ActionToButtonISX.cs" />
-     <Compile Include="Assets\Samples\OpenXR Plugin\1.2.8\Controller\Scripts\ActionToHaptics.cs" />
-     <Compile Include="Assets\Samples\OpenXR Plugin\1.2.8\Controller\Scripts\ActionToVisibilityISX.cs" />
-     <Compile Include="Assets\Samples\OpenXR Plugin\1.2.8\Controller\Scripts\ActionToVector2SliderISX.cs" />
-     <Compile Include="Assets\Samples\OpenXR Plugin\1.2.8\Controller\Scripts\TrackingModeOrigin.cs" />
      <Compile Include="Assets\Samples\OpenXR Plugin\1.2.8\Controller\Scripts\AutomaticTrackingModeChanger.cs" />
+     <Compile Include="Assets\Samples\OpenXR Plugin\1.2.8\Controller\Scripts\DisplayDeviceInfoFromActionISX.cs" />
+     <Compile Include="Assets\Samples\OpenXR Plugin\1.2.8\Controller\Scripts\ActionToVisibilityISX.cs" />
+     <Compile Include="Assets\Samples\OpenXR Plugin\1.2.8\Controller\Scripts\TrackingModeOrigin.cs" />
+     <Compile Include="Assets\Samples\OpenXR Plugin\1.2.8\Controller\Scripts\ActionToHaptics.cs" />
+     <Compile Include="Assets\Samples\OpenXR Plugin\1.2.8\Controller\Scripts\ActionToSliderISX.cs" />
+     <Compile Include="Assets\Samples\OpenXR Plugin\1.2.8\Controller\Scripts\ActionToVector2SliderISX.cs" />
+     <Compile Include="Assets\Samples\OpenXR Plugin\1.2.8\Controller\Scripts\ActionAssetEnabler.cs" />
+     <Compile Include="Assets\Samples\OpenXR Plugin\1.2.8\Controller\Scripts\ActionToButtonISX.cs" />
      <None Include="Assets\Samples\OpenXR Plugin\1.2.8\Controller\Scripts\ControllerSample.asmdef" />
  <Reference Include="UnityEngine">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2020.3.24f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
