@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: 9f4ba32a23134691b1ba537a9e475456
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - xrPlayerSettings: {fileID: 11400000, guid: 1ad61d72c6efbad4fb15c8b4f9973e47, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

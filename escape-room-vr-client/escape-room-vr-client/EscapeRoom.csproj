@@ -52,12 +52,19 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets\RG\EscapeRoom\Puzzles\SingleLever\SingleLeverSettings.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\Player\XRPlayerHandReference.cs" />
+     <Compile Include="Assets\RG\EscapeRoom\Puzzles\SingleLever\Scripts\SingleLeverSettings.cs" />
+     <Compile Include="Assets\RG\EscapeRoom\Player\Scripts\XRPlayerHandReference.cs" />
+     <Compile Include="Assets\RG\EscapeRoom\Factories\Scripts\RoomFactory.cs" />
+     <Compile Include="Assets\RG\EscapeRoom\Wiring\Scripts\ITickable.cs" />
      <Compile Include="Assets\RG\EscapeRoom\Puzzles\PuzzleFactory.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\Puzzles\SingleLever\SingleLeverFactory.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\Player\XRPlayerReference.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\Player\HandInteractableItemReference.cs" />
+     <Compile Include="Assets\RG\EscapeRoom\Puzzles\SingleLever\Scripts\SingleLeverFactory.cs" />
+     <Compile Include="Assets\RG\EscapeRoom\Factories\Scripts\XRPlayerFactory.cs" />
+     <Compile Include="Assets\RG\EscapeRoom\Interaction\Scripts\ControllerButtonListener.cs" />
+     <Compile Include="Assets\RG\EscapeRoom\Player\Scripts\HandInteractableItemReference.cs" />
+     <Compile Include="Assets\RG\EscapeRoom\Player\Scripts\XRPlayerSettings.cs" />
+     <Compile Include="Assets\RG\EscapeRoom\Player\Scripts\XRPlayerReference.cs" />
+     <Compile Include="Assets\RG\EscapeRoom\Interaction\Scripts\GrabHandler.cs" />
+     <Compile Include="Assets\RG\EscapeRoom\Wiring\Scripts\InteractionHandlers.cs" />
      <None Include="Assets\RG\EscapeRoom\EscapeRoom.asmdef" />
  <Reference Include="UnityEngine">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2020.3.24f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>

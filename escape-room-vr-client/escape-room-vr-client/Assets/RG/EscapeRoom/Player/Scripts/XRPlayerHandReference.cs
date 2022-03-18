@@ -20,11 +20,10 @@ public class XRPlayerHandReference : MonoBehaviour
         var handInteractableItemReference = other.gameObject.GetComponent<HandInteractableItemReference>();
         if (handInteractableItemReference) {
             interactableItemsInContactWithHand.Remove(handInteractableItemReference);
-            }
+        }
     }
-    public void OnTriggerStay(Collider other)
-    {
-    }
+    
+    
 }
 
 public interface HandInteractableItem

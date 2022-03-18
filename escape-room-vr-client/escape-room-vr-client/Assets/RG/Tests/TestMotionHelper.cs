@@ -1,19 +1,27 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
+using RG.EscapeRoom.Interaction.Scripts;
 using UnityEngine;
 
 namespace RG.Tests
 {
     public class TestMotionHelper
     {
+        private List<ITickable> tickablesToTick = new List<ITickable>();
 
-        public static IEnumerator Await(Task t)
+        public IEnumerator Await(Task t)
         {
-            while (!t.IsCompleted) { yield return null; }
+            while (!t.IsCompleted)
+            {
+                TickAllBackgroundTickables();
+                yield return null;
+            }
         }
 
-        public static async Task MoveGameObjectOverTime(GameObject objectToMove, Vector3 pathToFollow, float timeToMoveFullDistance)
+        public async Task MoveGameObjectOverTime(GameObject objectToMove, Vector3 pathToFollow, float timeToMoveFullDistance)
         {
             await MoveGameObjectToPositionOverTime(objectToMove, 
                 objectToMove.transform.position + pathToFollow, 
@@ -22,7 +30,7 @@ namespace RG.Tests
             );
         }
 
-        public static async Task MoveGameObjectToPositionOverTime(GameObject objectToMove, Vector3 positionToMoveTo, Quaternion rotationToMoveTo,
+        public async Task MoveGameObjectToPositionOverTime(GameObject objectToMove, Vector3 positionToMoveTo, Quaternion rotationToMoveTo,
                 float timeToMoveFullDistance)
             {
             var startTime = GetTime();
@@ -40,9 +48,8 @@ namespace RG.Tests
             }
         }
         
-        public static async Task Idle(float timeToIdle)
+        public async Task Idle(float timeToIdle)
         {
-            
             var startTime = GetTime();
             var currentTime = GetTime();
             while (currentTime - startTime < timeToIdle)
@@ -52,15 +59,22 @@ namespace RG.Tests
             }
         }
 
-        private static void _Move()
+        private void TickAllBackgroundTickables()
         {
-            throw new System.NotImplementedException();
+            for (int i = 0; i < tickablesToTick.Count; i++)
+            {
+                tickablesToTick[i].Tick();
+            }
         }
 
-        private static float GetTime()
+        private float GetTime()
         {
             return Time.time;
         }
 
+        public void TickInBackground(ITickable tickable)
+        {
+            tickablesToTick.Add(tickable);
+        }
     }
 }
