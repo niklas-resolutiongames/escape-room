@@ -1,40 +1,29 @@
-using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 namespace UnityEngine.XR.OpenXR.Samples.ControllerSample
 {
     public class ActionToVector2SliderISX : MonoBehaviour
     {
-        [SerializeField]
-        private InputActionReference m_ActionReference;
-        public InputActionReference actionReference { get => m_ActionReference; set => m_ActionReference = value; }
+        [SerializeField] private InputActionReference m_ActionReference;
 
-        [SerializeField]
-        public Slider xAxisSlider = null;
+        [SerializeField] public Slider xAxisSlider;
 
-        [SerializeField]
-        public Slider yAxisSlider = null;
+        [SerializeField] public Slider yAxisSlider;
 
-
-        private void OnEnable()
+        public InputActionReference actionReference
         {
-            if (xAxisSlider == null)
-                Debug.LogWarning("ActionToSlider Monobehaviour started without any associated X-axis slider.  This input won't be reported.", this);
-
-            if (yAxisSlider == null)
-                Debug.LogWarning("ActionToSlider Monobehaviour started without any associated Y-axis slider.  This input won't be reported.", this);
-
+            get => m_ActionReference;
+            set => m_ActionReference = value;
         }
-        void Update()
+
+        private void Update()
         {
             if (actionReference != null && actionReference.action != null && xAxisSlider != null && yAxisSlider != null)
             {
-                if (actionReference.action.enabled)
-                {
-                    SetVisible(gameObject, true);
-                }
+                if (actionReference.action.enabled) SetVisible(gameObject, true);
 
-                Vector2 value = actionReference.action.ReadValue<Vector2>();
+                var value = actionReference.action.ReadValue<Vector2>();
                 xAxisSlider.value = value.x;
                 yAxisSlider.value = value.y;
             }
@@ -44,17 +33,28 @@ namespace UnityEngine.XR.OpenXR.Samples.ControllerSample
             }
         }
 
-        void SetVisible(GameObject go, bool visible)
+
+        private void OnEnable()
         {
-            Graphic graphic = go.GetComponent<Graphic>();
+            if (xAxisSlider == null)
+                Debug.LogWarning(
+                    "ActionToSlider Monobehaviour started without any associated X-axis slider.  This input won't be reported.",
+                    this);
+
+            if (yAxisSlider == null)
+                Debug.LogWarning(
+                    "ActionToSlider Monobehaviour started without any associated Y-axis slider.  This input won't be reported.",
+                    this);
+        }
+
+        private void SetVisible(GameObject go, bool visible)
+        {
+            var graphic = go.GetComponent<Graphic>();
             if (graphic != null)
                 graphic.enabled = visible;
 
-            Graphic[] graphics = go.GetComponentsInChildren<Graphic>();
-            for (int i = 0; i < graphics.Length; i++)
-            {
-                graphics[i].enabled = visible;
-            }
+            var graphics = go.GetComponentsInChildren<Graphic>();
+            for (var i = 0; i < graphics.Length; i++) graphics[i].enabled = visible;
         }
     }
 }

@@ -1,66 +1,63 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace UnityEngine.XR.OpenXR.Samples.ControllerSample
 {
     public class AutomaticTrackingModeChanger : MonoBehaviour
     {
-        [SerializeField]
-        float m_ChangeInterval = 5.0f;
+        private static List<XRInputSubsystem> s_InputSubsystems = new List<XRInputSubsystem>();
+
+        private static readonly List<TrackingOriginModeFlags> s_SupportedTrackingOriginModes =
+            new List<TrackingOriginModeFlags>();
+
+        [SerializeField] private float m_ChangeInterval = 5.0f;
 
         private float m_TimeRemainingTillChange;
 
-        static List<XRInputSubsystem> s_InputSubsystems = new List<XRInputSubsystem>();
-        static List<TrackingOriginModeFlags> s_SupportedTrackingOriginModes = new List<TrackingOriginModeFlags>();
-
-        void OnEnable()
-        {
-            m_TimeRemainingTillChange = m_ChangeInterval;
-        }
-
-        void Update()
+        private void Update()
         {
             m_TimeRemainingTillChange -= Time.deltaTime;
             if (m_TimeRemainingTillChange <= 0.0f)
             {
-                List<XRInputSubsystem> inputSubsystems = new List<XRInputSubsystem>();
+                var inputSubsystems = new List<XRInputSubsystem>();
                 SubsystemManager.GetInstances(inputSubsystems);
-                XRInputSubsystem subsystem = inputSubsystems?[0];
+                var subsystem = inputSubsystems?[0];
                 if (subsystem != null)
                 {
                     UpdateSupportedTrackingOriginModes(subsystem);
                     SetToNextMode(subsystem);
                 }
+
                 m_TimeRemainingTillChange += m_ChangeInterval;
             }
         }
 
-        void UpdateSupportedTrackingOriginModes(XRInputSubsystem subsystem)
+        private void OnEnable()
         {
-            TrackingOriginModeFlags supportedOriginModes = subsystem.GetSupportedTrackingOriginModes();
+            m_TimeRemainingTillChange = m_ChangeInterval;
+        }
+
+        private void UpdateSupportedTrackingOriginModes(XRInputSubsystem subsystem)
+        {
+            var supportedOriginModes = subsystem.GetSupportedTrackingOriginModes();
             s_SupportedTrackingOriginModes.Clear();
-            for (int i = 0; i < 31; i++)
+            for (var i = 0; i < 31; i++)
             {
-                uint modeToCheck = 1u << i;
-                if ((modeToCheck & ((UInt32)supportedOriginModes)) != 0)
-                {
-                    s_SupportedTrackingOriginModes.Add((TrackingOriginModeFlags)modeToCheck);
-                }
+                var modeToCheck = 1u << i;
+                if ((modeToCheck & (uint) supportedOriginModes) != 0)
+                    s_SupportedTrackingOriginModes.Add((TrackingOriginModeFlags) modeToCheck);
             }
         }
 
-        void SetToNextMode(XRInputSubsystem subsystem)
+        private void SetToNextMode(XRInputSubsystem subsystem)
         {
-            TrackingOriginModeFlags currentOriginMode = subsystem.GetTrackingOriginMode();
-            for (int i = 0; i < s_SupportedTrackingOriginModes.Count; i++)
-            {
+            var currentOriginMode = subsystem.GetTrackingOriginMode();
+            for (var i = 0; i < s_SupportedTrackingOriginModes.Count; i++)
                 if (currentOriginMode == s_SupportedTrackingOriginModes[i])
                 {
-                    int nextModeIndex = (i + 1) % s_SupportedTrackingOriginModes.Count;
+                    var nextModeIndex = (i + 1) % s_SupportedTrackingOriginModes.Count;
                     subsystem.TrySetTrackingOriginMode(s_SupportedTrackingOriginModes[nextModeIndex]);
                     break;
                 }
-            }
         }
     }
 }

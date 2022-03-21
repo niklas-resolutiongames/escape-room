@@ -1,39 +1,30 @@
-using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 namespace UnityEngine.XR.OpenXR.Samples.ControllerSample
 {
     public class ActionToSliderISX : MonoBehaviour
     {
-        [SerializeField]
-        private InputActionReference m_ActionReference;
-        public InputActionReference actionReference { get => m_ActionReference; set => m_ActionReference = value; }
+        [SerializeField] private InputActionReference m_ActionReference;
 
-        [SerializeField]
-        Slider slider = null;
+        [SerializeField] private Slider slider;
 
-        Graphic graphic = null;
-        Graphic[] graphics = new Graphic[]{ };
+        private Graphic graphic;
+        private Graphic[] graphics = { };
 
-        private void OnEnable()
+        public InputActionReference actionReference
         {
-            if (slider == null)
-                Debug.LogWarning("ActionToSlider Monobehaviour started without any associated slider. This input will not be reported.", this);
-
-            graphic = gameObject.GetComponent<Graphic>();
-            graphics = gameObject.GetComponentsInChildren<Graphic>();
+            get => m_ActionReference;
+            set => m_ActionReference = value;
         }
 
-        void Update()
+        private void Update()
         {
             if (actionReference != null && actionReference.action != null && slider != null)
             {
-                if (actionReference.action.enabled)
-                {
-                    SetVisible(true);
-                }
+                if (actionReference.action.enabled) SetVisible(true);
 
-                float value = actionReference.action.ReadValue<float>();
+                var value = actionReference.action.ReadValue<float>();
                 slider.value = value;
             }
             else
@@ -42,15 +33,23 @@ namespace UnityEngine.XR.OpenXR.Samples.ControllerSample
             }
         }
 
-        void SetVisible(bool visible)
+        private void OnEnable()
+        {
+            if (slider == null)
+                Debug.LogWarning(
+                    "ActionToSlider Monobehaviour started without any associated slider. This input will not be reported.",
+                    this);
+
+            graphic = gameObject.GetComponent<Graphic>();
+            graphics = gameObject.GetComponentsInChildren<Graphic>();
+        }
+
+        private void SetVisible(bool visible)
         {
             if (graphic != null)
                 graphic.enabled = visible;
 
-            for (int i = 0; i < graphics.Length; i++)
-            {
-                graphics[i].enabled = visible;
-            }
+            for (var i = 0; i < graphics.Length; i++) graphics[i].enabled = visible;
         }
     }
 }

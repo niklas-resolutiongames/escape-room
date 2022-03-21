@@ -1,4 +1,3 @@
-using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.XR;
 
@@ -16,7 +15,7 @@ namespace UnityEngine.XR.OpenXR.Samples.ControllerSample
                 return;
 
             action.action.Enable();
-            action.action.performed += (ctx) =>
+            action.action.performed += ctx =>
             {
                 var control = action.action.activeControl;
                 if (null == control)

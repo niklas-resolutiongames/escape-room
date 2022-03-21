@@ -4,8 +4,8 @@ namespace UnityEngine.XR.OpenXR.Samples.ControllerSample
 {
     public class ActionAssetEnabler : MonoBehaviour
     {
-        [SerializeField]
-        InputActionAsset m_ActionAsset;
+        [SerializeField] private InputActionAsset m_ActionAsset;
+
         public InputActionAsset actionAsset
         {
             get => m_ActionAsset;
@@ -14,11 +14,7 @@ namespace UnityEngine.XR.OpenXR.Samples.ControllerSample
 
         private void OnEnable()
         {
-            if(m_ActionAsset != null)
-            {
-                m_ActionAsset.Enable();
-            }
+            if (m_ActionAsset != null) m_ActionAsset.Enable();
         }
-
     }
 }
