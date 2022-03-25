@@ -24,12 +24,12 @@ namespace RG.EscapeRoom.Controller.Puzzles.SingleLever
             Transform handTransform;
             if (pullData.handPull.TryGetValue(singleLeverReference.leverEnd, out handTransform))
             {
-                var leverPosition = singleLeverReference.gameObject.transform.position;
+                var leverOrigin = singleLeverReference.origin.transform;
                 var handPosition = handTransform.position;
-                var dy = handPosition.y - leverPosition.y;
-                var dz = handPosition.z - leverPosition.z;
-                var angle = Mathf.Atan2(dz, dy) * Mathf.Rad2Deg;
-                singleLeverModel.leverPosition = angle + 90;
+                var fromOriginToHand = leverOrigin.position - handPosition;
+                var leverNormal = -leverOrigin.forward;
+                var angle = Vector3.SignedAngle(leverNormal, fromOriginToHand, leverOrigin.right);
+                singleLeverModel.leverPosition = -angle;
             }
         }
     }

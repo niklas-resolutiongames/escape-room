@@ -2,11 +2,11 @@
 {
     public struct Vector3
     {
-        public double x;
-        public double y;
-        public double z;
+        public float x;
+        public float y;
+        public float z;
 
-        public Vector3(double x, double y, double z)
+        public Vector3(float x, float y, float z)
         {
             this.x = x;
             this.y = y;

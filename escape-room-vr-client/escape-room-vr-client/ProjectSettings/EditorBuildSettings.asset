@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/RG/Tests/TestScene.unity
+    path: Assets/RG/EscapeRoomPlayModeTests/TestScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: a5b98333fa86dd24b9ad82a476113224, type: 2}

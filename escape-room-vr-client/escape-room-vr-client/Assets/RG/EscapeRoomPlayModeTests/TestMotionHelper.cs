@@ -9,6 +9,7 @@ namespace RG.Tests
     public class TestMotionHelper
     {
         private readonly List<ITickable> tickablesToTick = new List<ITickable>();
+        private float testSpeed = 3f;
 
         public IEnumerator Await(Task t)
         {
@@ -33,14 +34,15 @@ namespace RG.Tests
             Quaternion rotationToMoveTo,
             float timeToMoveFullDistance)
         {
+            var scaledTime = timeToMoveFullDistance / testSpeed;
             var startTime = GetTime();
             var startPosition = objectToMove.transform.position;
             var startRotation = objectToMove.transform.rotation;
             var currentTime = GetTime();
-            while (currentTime - startTime < timeToMoveFullDistance)
+            while (currentTime - startTime < scaledTime)
             {
                 currentTime = GetTime();
-                var t = (currentTime - startTime) / timeToMoveFullDistance;
+                var t = (currentTime - startTime) / scaledTime;
                 var pos = Vector3.Lerp(startPosition, positionToMoveTo, t);
                 var rot = Quaternion.Lerp(startRotation, rotationToMoveTo, t);
                 objectToMove.transform.SetPositionAndRotation(pos, rot);
@@ -50,9 +52,10 @@ namespace RG.Tests
 
         public async Task Idle(float timeToIdle)
         {
+            var scaledTime = timeToIdle / testSpeed;
             var startTime = GetTime();
             var currentTime = GetTime();
-            while (currentTime - startTime < timeToIdle)
+            while (currentTime - startTime < scaledTime)
             {
                 currentTime = GetTime();
                 await Task.Yield();

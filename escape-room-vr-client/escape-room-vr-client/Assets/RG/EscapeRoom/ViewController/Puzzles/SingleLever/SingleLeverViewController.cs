@@ -18,7 +18,7 @@ namespace RG.EscapeRoom.ViewController.Puzzles.SingleLever
 
         public void Tick()
         {
-            view.leverJoint.transform.localEulerAngles = new Vector3(0,this.model.leverPosition,0);
+            view.leverJoint.transform.localEulerAngles = new Vector3(-model.leverPosition, 0, 0);
         }
     }
 }

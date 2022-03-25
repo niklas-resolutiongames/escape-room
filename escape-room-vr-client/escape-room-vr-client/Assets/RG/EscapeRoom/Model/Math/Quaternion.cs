@@ -2,17 +2,17 @@
 {
     public struct Quaternion
     {
-        private double w;
-        private double x;
-        private double y;
-        private double z;
+        public float x;
+        public float y;
+        public float z;
+        public float w;
 
-        public Quaternion(double w, double x, double y, double z)
+        public Quaternion(float x, float y, float z, float w)
         {
-            this.w = w;
             this.x = x;
             this.y = y;
             this.z = z;
+            this.w = w;
         }
     }
 }

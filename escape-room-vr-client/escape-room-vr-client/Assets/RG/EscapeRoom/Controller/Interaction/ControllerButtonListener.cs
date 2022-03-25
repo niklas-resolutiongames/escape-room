@@ -21,14 +21,12 @@ namespace RG.EscapeRoom.Interaction
             IControllerButtonData.Button button)
         {
             GetControllersPressedButtons(controller).Add(button);
-            Debug.Log($"Pressed {controller}, {button}");
         }
 
         public void NotifyButtonReleased(IControllerButtonData.Controller controller,
             IControllerButtonData.Button button)
         {
             GetControllersPressedButtons(controller).Remove(button);
-            Debug.Log($"Released {controller}, {button}");
         }
 
         private HashSet<IControllerButtonData.Button> GetControllersPressedButtons(

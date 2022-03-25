@@ -1,4 +1,5 @@
 ﻿using RG.EscapeRoom.Controller;
+using RG.EscapeRoom.Model.Puzzles;
 using RG.EscapeRoom.Model.Puzzles.SingleLever;
 using RG.EscapeRoom.ViewController;
 using UnityEngine;
@@ -6,12 +7,6 @@ using UnityEngine;
 public interface PuzzleFactory
 {
     public Puzzle CreatePuzzle(PuzzleDefinition puzzleDefinition, SingleLeverModel singleLeverModel);
-}
-
-public struct PuzzleDefinition
-{
-    public Vector3 position;
-    public Quaternion rotation;
 }
 
 public class Puzzle

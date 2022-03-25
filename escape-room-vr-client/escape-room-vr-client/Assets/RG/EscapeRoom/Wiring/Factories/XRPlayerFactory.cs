@@ -2,7 +2,7 @@
 using RG.EscapeRoom.Controller.Player;
 using UnityEngine;
 
-namespace RG.EscapeRoom.Player.Scripts
+namespace RG.EscapeRoom.Wiring.Factories
 {
     [CreateAssetMenu(menuName = "Factories/XRPlayerFactory", fileName = "XRPlayerFactory")]
     public class XRPlayerFactory : ScriptableObject
