@@ -7,6 +7,7 @@ using RG.EscapeRoom.Interaction;
 using RG.EscapeRoom.Interaction.Scripts;
 using RG.EscapeRoom.Model.Puzzles;
 using RG.EscapeRoom.Model.Puzzles.SingleLever;
+using RG.EscapeRoom.Model.Rooms;
 using RG.EscapeRoom.Puzzles.SingleLever;
 using RG.EscapeRoom.Wiring;
 using RG.EscapeRoom.Wiring.Factories;
@@ -32,11 +33,17 @@ public class SingleLeverFactoryTest
     [UnitySetUp]
     public IEnumerator SetUp()
     {
+        var roomDefinitionParser = new RoomDefinitionParser();
+        var json = TestUtil.ReadTextFile(
+            "Assets/RG/EscapeRoomPlayModeTests/SingleLever/SingleLeverFactoryTestRoomDefinition.json");
+        
+        var roomDefinition = roomDefinitionParser.Parse(json);
+        
         testMotionHelper = new TestMotionHelper();
 
         roomFactory =
             AssetDatabase.LoadAssetAtPath<RoomFactory>("Assets/RG/EscapeRoom/Wiring/Factories/RoomFactory.asset");
-        var createRoomTask = roomFactory.CreateRoomWithPlayerInit("TestScene");
+        var createRoomTask = roomFactory.CreateRoomWithPlayerInIt(roomDefinition);
         yield return testMotionHelper.Await(createRoomTask);
 
         playerReference = createRoomTask.Result;
@@ -50,18 +57,11 @@ public class SingleLeverFactoryTest
         singleLeverSettings = AssetDatabase.LoadAssetAtPath<SingleLeverSettings>(
             "Assets/RG/EscapeRoom/View/Puzzles/SingleLever/SingleLeverSettings.asset");
         singleLeverFactory = new SingleLeverFactory(singleLeverSettings, interactionDatas.pullData);
-        for (float i = 0; i < Math.PI * 2; i += (float) Math.PI / 5)
+        
+        for (int i = 0; i < roomDefinition.puzzles.Count; i++)
         {
-            var puzzleDefinition = new PuzzleDefinition();
-            puzzleDefinition.id = $"lever_{i}";
-            var x = (float) Math.Cos(i);
-            var y = 1.5f;
-            var z = (float) Math.Sin(i);
-            puzzleDefinition.position = new RG.EscapeRoom.Model.Math.Vector3(x, y, z);
-            var rotation = new Quaternion();
-            rotation.SetLookRotation(new Vector3(-x, 0, -z));
-            puzzleDefinition.rotation = MathUtils.InternalQuaternion(rotation);
-
+            var puzzleDefinition = roomDefinition.puzzles[i];
+                
             var singleLeverModel = new SingleLeverModel();
             var puzzle = singleLeverFactory.CreatePuzzle(puzzleDefinition, singleLeverModel);
             var puzzleView = (SingleLeverReference) puzzle.view;
@@ -94,7 +94,9 @@ public class SingleLeverFactoryTest
             yield return testMotionHelper.Await(testMotionHelper.MoveGameObjectToPositionOverTime(
                 activeHand.gameObject,
                 leverEndTransform.position,
-                leverEndTransform.rotation, 2));
+                leverEndTransform.rotation, 
+                2,
+                playerReference.head));
 
             yield return testMotionHelper.Await(testMotionHelper.Idle(1));
             controllerButtonData.NotifyButtonPressed(activeController,

@@ -9,7 +9,7 @@ namespace RG.Tests
     public class TestMotionHelper
     {
         private readonly List<ITickable> tickablesToTick = new List<ITickable>();
-        private float testSpeed = 3f;
+        private float testSpeed = 1f;
 
         public IEnumerator Await(Task t)
         {
@@ -32,7 +32,7 @@ namespace RG.Tests
 
         public async Task MoveGameObjectToPositionOverTime(GameObject objectToMove, Vector3 positionToMoveTo,
             Quaternion rotationToMoveTo,
-            float timeToMoveFullDistance)
+            float timeToMoveFullDistance, GameObject lookAtMovingObject = null)
         {
             var scaledTime = timeToMoveFullDistance / testSpeed;
             var startTime = GetTime();
@@ -46,6 +46,10 @@ namespace RG.Tests
                 var pos = Vector3.Lerp(startPosition, positionToMoveTo, t);
                 var rot = Quaternion.Lerp(startRotation, rotationToMoveTo, t);
                 objectToMove.transform.SetPositionAndRotation(pos, rot);
+                if (lookAtMovingObject != null)
+                {
+                    lookAtMovingObject.transform.LookAt(objectToMove.transform);
+                }
                 await Task.Yield();
             }
         }

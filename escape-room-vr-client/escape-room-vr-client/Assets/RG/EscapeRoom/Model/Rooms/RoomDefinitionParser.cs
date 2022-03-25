@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using RG.EscapeRoom.Model.Puzzles;
 using UnityEngine;
 
@@ -17,6 +18,7 @@ namespace RG.EscapeRoom.Model.Rooms
         }
     }
 
+    [Serializable]
     public class RoomDefinition
     {
         public string scene;

@@ -1,11 +1,14 @@
-﻿namespace RG.EscapeRoom.Model.Math
+﻿using System;
+
+namespace RG.EscapeRoom.Model.Math
 {
+    [Serializable]
     public struct Vector3
     {
         public float x;
         public float y;
         public float z;
-
+        
         public Vector3(float x, float y, float z)
         {
             this.x = x;

@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using RG.EscapeRoom.Controller.Player;
+using RG.EscapeRoom.Model.Rooms;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,9 +11,9 @@ namespace RG.EscapeRoom.Wiring.Factories
     {
         public XRPlayerFactory xrPlayerFactory;
 
-        public async Task<XRPlayerReference> CreateRoomWithPlayerInit(string sceneName)
+        public async Task<XRPlayerReference> CreateRoomWithPlayerInIt(RoomDefinition roomDefinition)
         {
-            var loadAction = SceneManager.LoadSceneAsync(sceneName);
+            var loadAction = SceneManager.LoadSceneAsync(roomDefinition.scene);
 
             var stillLoading = true;
             var totalWait = 0;

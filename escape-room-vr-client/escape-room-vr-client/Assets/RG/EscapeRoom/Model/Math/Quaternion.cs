@@ -1,5 +1,8 @@
-﻿namespace RG.EscapeRoom.Model.Math
+﻿using System;
+
+namespace RG.EscapeRoom.Model.Math
 {
+    [Serializable]
     public struct Quaternion
     {
         public float x;
