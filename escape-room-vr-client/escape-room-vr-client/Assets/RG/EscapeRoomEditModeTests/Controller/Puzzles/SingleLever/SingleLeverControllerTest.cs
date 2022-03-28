@@ -30,7 +30,7 @@ namespace RG.EscapeRoom.Controller.Puzzles.SingleLever
         [Test]
         public void PullLeverDownOnNonRotatedLeverWillLowerValue()
         {
-            pullData.handPull[singleLeverReference.leverEnd] = CreateGameObject(0,-.1f,-.1f).transform;
+            pullData.handPull[singleLeverReference.leverEnd] = CreateGameObject(0,-.1f,.1f).transform;
             singleLeverController.Tick();
             Assert.AreEqual(-45, singleLeverModel.leverPosition);
         }
@@ -38,7 +38,7 @@ namespace RG.EscapeRoom.Controller.Puzzles.SingleLever
         [Test]
         public void PullLeverUpOnNonRotatedLeverWillIncreaseValue()
         {
-            pullData.handPull[singleLeverReference.leverEnd] = CreateGameObject(0,.1f,-.1f).transform;
+            pullData.handPull[singleLeverReference.leverEnd] = CreateGameObject(0,.1f,.1f).transform;
             singleLeverController.Tick();
             Assert.AreEqual(45, singleLeverModel.leverPosition);
         }
