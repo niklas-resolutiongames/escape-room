@@ -9,8 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5eb4b54231630a479e9a1a29d0a0f62, type: 3}
-  m_Name: RoomFactory
+  m_Script: {fileID: 11500000, guid: 3eaf7cbfc55b4ffab7a01cee27753265, type: 3}
+  m_Name: PuzzlesFactoryFactory
   m_EditorClassIdentifier: 
-  xrPlayerFactory: {fileID: 11400000, guid: 1e532304f6a8d1345a1ed2c7eb1fcd7c, type: 2}
-  puzzlesFactoryFactory: {fileID: 11400000, guid: 44072546746b4b34a8faaf081366d44d, type: 2}
+  singleLeverSettings: {fileID: 11400000, guid: cfe65f1e280edef4d919afb19f486474, type: 2}
