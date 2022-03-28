@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using RG.EscapeRoom.Controller.Player;
 using RG.EscapeRoom.Wiring;
 using UnityEngine;
 
@@ -9,13 +10,19 @@ namespace RG.Tests
     public class TestMotionHelper
     {
         private readonly List<ITickable> tickablesToTick = new List<ITickable>();
-        private float testSpeed = 1f;
+        private float testSpeed = 5f;
+        private XRPlayerReference playerReference;
 
         public IEnumerator Await(Task t)
         {
             while (!t.IsCompleted)
             {
                 TickAllBackgroundTickables();
+                if (playerReference != null)
+                {
+                    Vector3 pointBetweenHands = (playerReference.leftHand.transform.position + playerReference.leftHand.transform.position) / 2;
+                    playerReference.head.transform.LookAt(pointBetweenHands);
+                }
                 yield return null;
             }
         }
@@ -32,7 +39,7 @@ namespace RG.Tests
 
         public async Task MoveGameObjectToPositionOverTime(GameObject objectToMove, Vector3 positionToMoveTo,
             Quaternion rotationToMoveTo,
-            float timeToMoveFullDistance, GameObject lookAtMovingObject = null)
+            float timeToMoveFullDistance)
         {
             var scaledTime = timeToMoveFullDistance / testSpeed;
             var startTime = GetTime();
@@ -46,10 +53,6 @@ namespace RG.Tests
                 var pos = Vector3.Lerp(startPosition, positionToMoveTo, t);
                 var rot = Quaternion.Lerp(startRotation, rotationToMoveTo, t);
                 objectToMove.transform.SetPositionAndRotation(pos, rot);
-                if (lookAtMovingObject != null)
-                {
-                    lookAtMovingObject.transform.LookAt(objectToMove.transform);
-                }
                 await Task.Yield();
             }
         }
@@ -79,6 +82,11 @@ namespace RG.Tests
         public void TickInBackground(ITickable tickable)
         {
             tickablesToTick.Add(tickable);
+        }
+
+        public void SetPlayerReference(XRPlayerReference playerReference)
+        {
+            this.playerReference = playerReference;
         }
     }
 }

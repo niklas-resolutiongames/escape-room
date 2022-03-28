@@ -1,11 +1,8 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using NUnit.Framework;
 using RG.EscapeRoom.Controller.Player;
 using RG.EscapeRoom.Interaction;
 using RG.EscapeRoom.Interaction.Scripts;
-using RG.EscapeRoom.Model.Puzzles;
 using RG.EscapeRoom.Model.Puzzles.SingleLever;
 using RG.EscapeRoom.Model.Rooms;
 using RG.EscapeRoom.Puzzles.SingleLever;
@@ -22,81 +19,71 @@ public class SingleLeverFactoryTest
     private InteractionHandlers interactionHandlers;
     private XRPlayerReference playerReference;
     private RoomFactory roomFactory;
-    private SingleLeverFactory singleLeverFactory;
-
-    private SingleLeverSettings singleLeverSettings;
     private TestMotionHelper testMotionHelper;
-    private List<SingleLeverModel> singleLeverModels = new List<SingleLeverModel>();
-    private List<Puzzle> puzzles = new List<Puzzle>();
-    private List<SingleLeverReference> puzzleViews = new List<SingleLeverReference>();
+    private Room room;
+    private RoomDefinition roomDefinition;
 
     [UnitySetUp]
     public IEnumerator SetUp()
     {
+        var interactionDatas = InteractionHandlers.CreateDatas();
         var roomDefinitionParser = new RoomDefinitionParser();
         var json = TestUtil.ReadTextFile(
             "Assets/RG/EscapeRoomPlayModeTests/SingleLever/SingleLeverFactoryTestRoomDefinition.json");
         
-        var roomDefinition = roomDefinitionParser.Parse(json);
-        
+        roomDefinition = roomDefinitionParser.Parse(json);
+
         testMotionHelper = new TestMotionHelper();
 
         roomFactory =
             AssetDatabase.LoadAssetAtPath<RoomFactory>("Assets/RG/EscapeRoom/Wiring/Factories/RoomFactory.asset");
-        var createRoomTask = roomFactory.CreateRoomWithPlayerInIt(roomDefinition);
+        var createRoomTask = roomFactory.CreateRoomWithPlayerInIt(roomDefinition, interactionDatas);
         yield return testMotionHelper.Await(createRoomTask);
 
-        playerReference = createRoomTask.Result;
+        room = createRoomTask.Result;
+        playerReference = room.playerReference;
 
+        testMotionHelper.SetPlayerReference(playerReference);
+
+        playerReference.head.transform.position = new Vector3(0f, 1.8f, 0f);
+        playerReference.leftHand.transform.position = new Vector3(.2f, 1.5f, -.2f);
+        playerReference.rightHand.transform.position = new Vector3(.2f, 1.5f, .2f);
+        
         controllerButtonData = new ControllerButtonData();
         interactionHandlers =
-            new InteractionHandlers(controllerButtonData, playerReference.leftHand, playerReference.rightHand);
-        var interactionDatas = interactionHandlers.Initialize();
+            new InteractionHandlers(controllerButtonData, playerReference.leftHand, playerReference.rightHand, interactionDatas);
+        interactionHandlers.InitializeHandlers();
         testMotionHelper.TickInBackground(interactionHandlers);
 
-        singleLeverSettings = AssetDatabase.LoadAssetAtPath<SingleLeverSettings>(
-            "Assets/RG/EscapeRoom/View/Puzzles/SingleLever/SingleLeverSettings.asset");
-        singleLeverFactory = new SingleLeverFactory(singleLeverSettings, interactionDatas.pullData);
-        
-        for (int i = 0; i < roomDefinition.puzzles.Count; i++)
+        for (int i = 0; i < roomDefinition.puzzles.Length; i++)
         {
-            var puzzleDefinition = roomDefinition.puzzles[i];
-                
-            var singleLeverModel = new SingleLeverModel();
-            var puzzle = singleLeverFactory.CreatePuzzle(puzzleDefinition, singleLeverModel);
-            var puzzleView = (SingleLeverReference) puzzle.view;
+            var puzzle = room.puzzles[i];
             testMotionHelper.TickInBackground(puzzle.controller);
             testMotionHelper.TickInBackground(puzzle.viewController);
-            Assert.NotNull(puzzleView);
-            puzzleViews.Add(puzzleView);
-            singleLeverModels.Add(singleLeverModel);
         }
     }
 
     [UnityTest]
     public IEnumerator PullLeverWillSetValue()
     {
-        playerReference.head.transform.position = new Vector3(1.2f, 2.4f, 0.25f);
-        for (int i = 0; i < puzzleViews.Count; i++)
+        for (int i = 0; i < room.puzzles.Count; i++)
         {
-            var puzzleView = puzzleViews[i];
-            var singleLeverModel = singleLeverModels[i];
+            var puzzle = room.puzzles[i];
+            var puzzleDefinition = roomDefinition.puzzles[i];
+            var singleLeverModel = (SingleLeverModel) room.roomModel.puzzles[puzzleDefinition.id];
             var isDown = i % 2 == 0;
             var direction = isDown ? Vector3.down: Vector3.up;
             var expectedValue = isDown ? -1 : 1;
             var activeHand = isDown? playerReference.rightHand: playerReference.leftHand;
             var activeController = isDown? IControllerButtonData.Controller.Right: IControllerButtonData.Controller.Left;
-            var leverEnd = puzzleView.leverEnd;
+            var leverEnd = ((SingleLeverReference) puzzle.view).leverEnd;
             var leverEndTransform = leverEnd.transform;
             
-            playerReference.head.transform.LookAt(leverEndTransform);
-
             yield return testMotionHelper.Await(testMotionHelper.MoveGameObjectToPositionOverTime(
                 activeHand.gameObject,
                 leverEndTransform.position,
                 leverEndTransform.rotation, 
-                2,
-                playerReference.head));
+                2));
 
             yield return testMotionHelper.Await(testMotionHelper.Idle(1));
             controllerButtonData.NotifyButtonPressed(activeController,

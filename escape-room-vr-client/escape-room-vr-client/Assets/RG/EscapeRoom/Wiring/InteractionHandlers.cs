@@ -15,16 +15,18 @@ namespace RG.EscapeRoom.Wiring
         private readonly ControllerButtonData controllerButtonData;
         private readonly XRPlayerHandReference leftHandReference;
         private readonly XRPlayerHandReference rightHandReference;
-        private HandPullHandler handPullHandler;
+        private readonly InteractionDatas interactionDatas;
 
+        private HandPullHandler handPullHandler;
         private GrabHandler grabHandler;
 
         public InteractionHandlers(ControllerButtonData controllerButtonData, XRPlayerHandReference leftHandReference,
-            XRPlayerHandReference rightHandReference)
+            XRPlayerHandReference rightHandReference, InteractionDatas interactionDatas)
         {
             this.controllerButtonData = controllerButtonData;
             this.leftHandReference = leftHandReference;
             this.rightHandReference = rightHandReference;
+            this.interactionDatas = interactionDatas;
         }
 
         public void Tick()
@@ -33,15 +35,20 @@ namespace RG.EscapeRoom.Wiring
             handPullHandler.Tick();
         }
 
-        public InteractionDatas Initialize()
+        public static InteractionDatas CreateDatas()
         {
             var interactionDatas = new InteractionDatas();
             interactionDatas.grabData = new GrabData();
             interactionDatas.pullData = new PullData();
+            return interactionDatas;
+        }
+
+        public void InitializeHandlers()
+        {
             grabHandler = new GrabHandler(controllerButtonData, interactionDatas.grabData, leftHandReference,
                 rightHandReference);
-            handPullHandler = new HandPullHandler(interactionDatas.pullData, interactionDatas.grabData, leftHandReference, rightHandReference);
-            return interactionDatas;
+            handPullHandler = new HandPullHandler(interactionDatas.pullData, interactionDatas.grabData, leftHandReference,
+                rightHandReference);
         }
     }
 }

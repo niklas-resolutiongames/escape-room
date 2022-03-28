@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using RG.EscapeRoom.Controller.Interaction;
 using RG.EscapeRoom.Controller.Player;
+using RG.EscapeRoom.Model.Puzzles;
 using RG.EscapeRoom.Model.Puzzles.SingleLever;
 using RG.EscapeRoom.Puzzles.SingleLever;
 using UnityEngine;
@@ -22,7 +23,7 @@ namespace RG.EscapeRoom.Controller.Puzzles.SingleLever
             singleLeverReference.origin = CreateGameObject(0,0,0);
             singleLeverReference.leverJoint = CreateGameObject(0,0,0);
             singleLeverReference.leverEnd = new HandInteractableItemReference();
-            singleLeverModel = new SingleLeverModel();
+            singleLeverModel = new SingleLeverModel("", PuzzleTypes.SingleLever);
             singleLeverController = new SingleLeverController(pullData, singleLeverReference, singleLeverModel);
         }
 

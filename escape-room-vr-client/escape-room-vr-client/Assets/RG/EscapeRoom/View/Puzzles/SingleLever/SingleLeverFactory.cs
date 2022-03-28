@@ -6,7 +6,7 @@ using RG.EscapeRoom.Puzzles.SingleLever;
 using RG.EscapeRoom.ViewController.Puzzles.SingleLever;
 using UnityEngine;
 
-public class SingleLeverFactory : PuzzleFactory
+public class SingleLeverFactory : PuzzleFactory<SingleLeverModel>
 {
     private readonly PullData pullData;
     private readonly SingleLeverSettings singleLeverSettings;

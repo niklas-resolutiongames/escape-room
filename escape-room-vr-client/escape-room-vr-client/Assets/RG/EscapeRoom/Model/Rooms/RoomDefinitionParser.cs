@@ -19,9 +19,9 @@ namespace RG.EscapeRoom.Model.Rooms
     }
 
     [Serializable]
-    public class RoomDefinition
+    public struct RoomDefinition
     {
         public string scene;
-        public List<PuzzleDefinition> puzzles;
+        public PuzzleDefinition[] puzzles;
     }
 }

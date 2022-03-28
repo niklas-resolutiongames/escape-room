@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: RoomFactory
   m_EditorClassIdentifier: 
   xrPlayerFactory: {fileID: 11400000, guid: 1e532304f6a8d1345a1ed2c7eb1fcd7c, type: 2}
+  puzzlesFactoryFactory: {fileID: 11400000, guid: 712051537e2f15246bcaab3c9e862d69, type: 2}
