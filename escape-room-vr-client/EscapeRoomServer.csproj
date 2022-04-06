@@ -13,11 +13,11 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{c4c35276-8943-d4c4-5ecc-23aebbe0db02}</ProjectGuid>
+    <ProjectGuid>{d9269cb8-f5fd-80f6-9df6-54ada98801f8}</ProjectGuid>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <AssemblyName>EscapeRoom</AssemblyName>
+    <AssemblyName>EscapeRoomServer</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <BaseDirectory>.</BaseDirectory>
@@ -52,34 +52,8 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets\RG\EscapeRoom\Wiring\Factories\PuzzlesFactoryFactory.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\View\Rooms\RoomViewFactory.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\Controller\Interaction\GrabHandler.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\View\Puzzles\SingleLever\SingleLeverReference.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\Controller\Interaction\HandPullHandler.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\Wiring\InteractionHandlers.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\View\Puzzles\SingleLever\SingleLeverSettings.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\Model\Rooms\RoomDefinitionParser.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\Controller\Player\XRPlayerHandReference.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\Model\Puzzles\SingleLever\SingleLeverModel.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\Model\Puzzles\PuzzleDefinition.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\Model\Rooms\RoomModelFactory.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\Wiring\Factories\RoomFactory.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\Wiring\ITickable.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\View\Puzzles\PuzzleFactory.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\Model\Math\Quaternion.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\View\Puzzles\SingleLever\SingleLeverFactory.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\Wiring\Factories\XRPlayerFactory.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\Controller\Interaction\ControllerButtonListener.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\ViewController\IViewController.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\Controller\Player\HandInteractableItemReference.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\Model\Math\Vector3.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\ViewController\Puzzles\SingleLever\SingleLeverViewController.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\Controller\Player\XRPlayerSettings.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\Controller\IController.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\Controller\Player\XRPlayerReference.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\Controller\Puzzles\SingleLever\SingleLeverController.cs" />
-     <None Include="Assets\RG\EscapeRoom\EscapeRoom.asmdef" />
+     <Compile Include="Assets\RG\EscapeRoomServer\Server\EscapeRoomSocketServer.cs" />
+     <None Include="Assets\RG\EscapeRoomServer\EscapeRoomServer.asmdef" />
  <Reference Include="UnityEngine">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2020.3.24f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
  </Reference>

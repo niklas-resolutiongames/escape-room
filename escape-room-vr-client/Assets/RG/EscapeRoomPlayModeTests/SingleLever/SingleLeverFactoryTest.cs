@@ -18,7 +18,6 @@ public class SingleLeverFactoryTest
     private ControllerButtonData controllerButtonData;
     private InteractionHandlers interactionHandlers;
     private XRPlayerReference playerReference;
-    private RoomFactory roomFactory;
     private TestMotionHelper testMotionHelper;
     private Room room;
     private RoomDefinition roomDefinition;
@@ -26,16 +25,16 @@ public class SingleLeverFactoryTest
     [UnitySetUp]
     public IEnumerator SetUp()
     {
+        testMotionHelper = new TestMotionHelper();
         var interactionDatas = InteractionHandlers.CreateDatas();
+        
         var roomDefinitionParser = new RoomDefinitionParser();
         var json = TestUtil.ReadTextFile(
             "Assets/RG/EscapeRoomPlayModeTests/SingleLever/SingleLeverFactoryTestRoomDefinition.json");
         
         roomDefinition = roomDefinitionParser.Parse(json);
 
-        testMotionHelper = new TestMotionHelper();
-
-        roomFactory =
+        var roomFactory =
             AssetDatabase.LoadAssetAtPath<RoomFactory>("Assets/RG/EscapeRoom/Wiring/Factories/RoomFactory.asset");
         var createRoomTask = roomFactory.CreateRoomWithPlayerInIt(roomDefinition, interactionDatas);
         yield return testMotionHelper.Await(createRoomTask);

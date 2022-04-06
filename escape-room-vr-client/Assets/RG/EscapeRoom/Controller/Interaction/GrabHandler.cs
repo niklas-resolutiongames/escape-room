@@ -31,39 +31,35 @@ namespace RG.EscapeRoom.Controller.Interaction
 
         public void Tick()
         {
-            if (controllerButtonData.IsButtonPressed(IControllerButtonData.Controller.Left,
-                    IControllerButtonData.Button.Grip))
-            {
-                if (grabData.itemHeldInLeftHand == null)
-                    if (leftHand.interactableItemsInContactWithHand.Count > 0)
-                    {
-                        grabData.itemHeldInLeftHand = leftHand.interactableItemsInContactWithHand.First();
-                        if (grabData.itemHeldInLeftHand != null)
-                            Debug.Log($"Left hand grabbed {grabData.itemHeldInLeftHand}");
-                    }
-            }
-            else
-            {
-                if (grabData.itemHeldInLeftHand != null) Debug.Log($"Left hand released {grabData.itemHeldInLeftHand}");
-                grabData.itemHeldInLeftHand = null;
-            }
+            grabData.itemHeldInLeftHand = CheckGrab(IControllerButtonData.Controller.Left, grabData.itemHeldInLeftHand,
+                leftHand);
+            grabData.itemHeldInRightHand = CheckGrab(IControllerButtonData.Controller.Right, grabData.itemHeldInRightHand,
+                rightHand);
+        }
 
-            if (controllerButtonData.IsButtonPressed(IControllerButtonData.Controller.Right,
+        private HandInteractableItem CheckGrab(IControllerButtonData.Controller controller, HandInteractableItem itemHeldInHand, XRPlayerHandReference handReference)
+        {
+            if (controllerButtonData.IsButtonPressed(controller,
                     IControllerButtonData.Button.Grip))
             {
-                if (grabData.itemHeldInRightHand == null)
-                    if (rightHand.interactableItemsInContactWithHand.Count > 0)
+                if (itemHeldInHand == null)
+                {
+                    if (handReference.interactableItemsInContactWithHand.Count > 0)
                     {
-                        grabData.itemHeldInRightHand = rightHand.interactableItemsInContactWithHand.First();
-                        if (grabData.itemHeldInRightHand != null)
-                            Debug.Log($"Right hand grabbed {grabData.itemHeldInRightHand}");
+                        var grabbedItem = handReference.interactableItemsInContactWithHand.First();
+                        if (grabbedItem != null)
+                            Debug.Log($"{controller} grabbed {grabbedItem}");
+                        return grabbedItem;
                     }
+                }
+
+                return itemHeldInHand;
             }
             else
             {
-                if (grabData.itemHeldInRightHand != null)
-                    Debug.Log($"Right hand released {grabData.itemHeldInRightHand}");
-                grabData.itemHeldInRightHand = null;
+                if (itemHeldInHand != null)
+                    Debug.Log($"{controller} released {itemHeldInHand}");
+                return null;
             }
         }
     }

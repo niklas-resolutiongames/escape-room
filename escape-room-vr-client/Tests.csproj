@@ -54,7 +54,9 @@
   <ItemGroup>
      <Compile Include="Assets\RG\EscapeRoomPlayModeTests\TestMotionHelper.cs" />
      <Compile Include="Assets\RG\EscapeRoomPlayModeTests\TestUtil.cs" />
+     <Compile Include="Assets\RG\EscapeRoomPlayModeTests\UnityTestLogger.cs" />
      <Compile Include="Assets\RG\EscapeRoomPlayModeTests\SingleLever\SingleLeverFactoryTest.cs" />
+     <Compile Include="Assets\RG\EscapeRoomPlayModeTests\Server\ConnectToServerTest.cs" />
      <None Include="Assets\RG\EscapeRoomPlayModeTests\Tests.asmdef" />
  <Reference Include="UnityEngine">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2020.3.24f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
@@ -643,6 +645,14 @@
     <ProjectReference Include="EscapeRoom.csproj">
       <Project>{c4c35276-8943-d4c4-5ecc-23aebbe0db02}</Project>
       <Name>EscapeRoom</Name>
+    </ProjectReference>
+    <ProjectReference Include="EscapeRoomServer.csproj">
+      <Project>{d9269cb8-f5fd-80f6-9df6-54ada98801f8}</Project>
+      <Name>EscapeRoomServer</Name>
+    </ProjectReference>
+    <ProjectReference Include="EscapeRoomProtocol.csproj">
+      <Project>{f6944fa1-2e6b-8e75-9b6f-5796e80acc79}</Project>
+      <Name>EscapeRoomProtocol</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
