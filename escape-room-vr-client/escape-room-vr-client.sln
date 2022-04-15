@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EscapeRoomProtocol", "Escap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EscapeRoomServer", "EscapeRoomServer.csproj", "{d9269cb8-f5fd-80f6-9df6-54ada98801f8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EscapeRoomModel", "EscapeRoomModel.csproj", "{acf40201-1b74-fa3b-3375-d2fb919b8e61}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EditModeTests", "EditModeTests.csproj", "{6f188ba5-5123-6ee1-219a-3bbcb89f581c}"
 EndProject
 Global
@@ -33,6 +35,10 @@ Global
 		{d9269cb8-f5fd-80f6-9df6-54ada98801f8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{d9269cb8-f5fd-80f6-9df6-54ada98801f8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{d9269cb8-f5fd-80f6-9df6-54ada98801f8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{acf40201-1b74-fa3b-3375-d2fb919b8e61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{acf40201-1b74-fa3b-3375-d2fb919b8e61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{acf40201-1b74-fa3b-3375-d2fb919b8e61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{acf40201-1b74-fa3b-3375-d2fb919b8e61}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6f188ba5-5123-6ee1-219a-3bbcb89f581c}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6f188ba5-5123-6ee1-219a-3bbcb89f581c}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6f188ba5-5123-6ee1-219a-3bbcb89f581c}.Release|Any CPU.ActiveCfg = Release|Any CPU

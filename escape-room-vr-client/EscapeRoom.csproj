@@ -59,21 +59,15 @@
      <Compile Include="Assets\RG\EscapeRoom\Controller\Interaction\HandPullHandler.cs" />
      <Compile Include="Assets\RG\EscapeRoom\Wiring\InteractionHandlers.cs" />
      <Compile Include="Assets\RG\EscapeRoom\View\Puzzles\SingleLever\SingleLeverSettings.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\Model\Rooms\RoomDefinitionParser.cs" />
      <Compile Include="Assets\RG\EscapeRoom\Controller\Player\XRPlayerHandReference.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\Model\Puzzles\SingleLever\SingleLeverModel.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\Model\Puzzles\PuzzleDefinition.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\Model\Rooms\RoomModelFactory.cs" />
      <Compile Include="Assets\RG\EscapeRoom\Wiring\Factories\RoomFactory.cs" />
      <Compile Include="Assets\RG\EscapeRoom\Wiring\ITickable.cs" />
      <Compile Include="Assets\RG\EscapeRoom\View\Puzzles\PuzzleFactory.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\Model\Math\Quaternion.cs" />
      <Compile Include="Assets\RG\EscapeRoom\View\Puzzles\SingleLever\SingleLeverFactory.cs" />
      <Compile Include="Assets\RG\EscapeRoom\Wiring\Factories\XRPlayerFactory.cs" />
      <Compile Include="Assets\RG\EscapeRoom\Controller\Interaction\ControllerButtonListener.cs" />
      <Compile Include="Assets\RG\EscapeRoom\ViewController\IViewController.cs" />
      <Compile Include="Assets\RG\EscapeRoom\Controller\Player\HandInteractableItemReference.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\Model\Math\Vector3.cs" />
      <Compile Include="Assets\RG\EscapeRoom\ViewController\Puzzles\SingleLever\SingleLeverViewController.cs" />
      <Compile Include="Assets\RG\EscapeRoom\Controller\Player\XRPlayerSettings.cs" />
      <Compile Include="Assets\RG\EscapeRoom\Controller\IController.cs" />
@@ -679,6 +673,10 @@
     <ProjectReference Include="EscapeRoomProtocol.csproj">
       <Project>{f6944fa1-2e6b-8e75-9b6f-5796e80acc79}</Project>
       <Name>EscapeRoomProtocol</Name>
+    </ProjectReference>
+    <ProjectReference Include="EscapeRoomModel.csproj">
+      <Project>{acf40201-1b74-fa3b-3375-d2fb919b8e61}</Project>
+      <Name>EscapeRoomModel</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

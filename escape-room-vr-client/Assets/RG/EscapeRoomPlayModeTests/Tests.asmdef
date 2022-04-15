@@ -6,7 +6,8 @@
     "UnityEditor.TestRunner",
     "EscapeRoom",
     "EscapeRoomServer",
-    "EscapeRoomProtocol"
+    "EscapeRoomProtocol",
+    "EscapeRoomModel"
   ],
   "includePlatforms": [],
   "excludePlatforms": [],

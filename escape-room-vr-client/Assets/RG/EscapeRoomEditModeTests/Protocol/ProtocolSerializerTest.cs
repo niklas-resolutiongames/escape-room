@@ -30,7 +30,7 @@ namespace RG.EscapeRoomEditModeTests.Protocol
             protocolSerializer.SerializeMessage(message, writeStream);
             protocolSerializer.DeserializeNextMessage(readStream, testMessageReceiver);
             var deserializedMessage = (LoadRoomMessage) testMessageReceiver.messages[0];
-            Assert.AreEqual(roomId, deserializedMessage.roomId);
+            Assert.AreEqual(roomId, deserializedMessage.roomDefinitionId);
         }
     }
 }

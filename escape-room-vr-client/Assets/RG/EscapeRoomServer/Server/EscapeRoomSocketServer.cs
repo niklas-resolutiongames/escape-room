@@ -5,12 +5,15 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
+using RG.EscapeRoom.Model.Rooms;
 using RG.EscapeRoomProtocol;
 using RG.EscapeRoomServer.Server;
 
 public class EscapeRoomSocketServer
 {
     private readonly int port;
+    private readonly string pathToRoomDefinition;
+    private readonly RoomDefinitionParser roomDefinitionParser;
     private readonly ILogger logger;
     private readonly CancellationTokenSource cancellationTokenSource;
     private readonly ProtocolSerializer protocolSerializer;
@@ -19,14 +22,37 @@ public class EscapeRoomSocketServer
     private Dictionary<SocketAddress, Client> clients = new Dictionary<SocketAddress, Client>();
     private Dictionary<Client, ClientMessageReceiver> receivers = new Dictionary<Client, ClientMessageReceiver>();
     private Queue<Client> clientsToProcess = new Queue<Client>();
+    private RoomDefinition roomDefintion;
 
-    public EscapeRoomSocketServer(int port, ILogger logger, CancellationTokenSource cancellationTokenSource, ProtocolSerializer protocolSerializer, MessageSender messageSender)
+    public EscapeRoomSocketServer(int port, string pathToRoomDefinition, RoomDefinitionParser roomDefinitionParser, ILogger logger, CancellationTokenSource cancellationTokenSource, ProtocolSerializer protocolSerializer, MessageSender messageSender)
     {
         this.port = port;
+        this.pathToRoomDefinition = pathToRoomDefinition;
+        this.roomDefinitionParser = roomDefinitionParser;
         this.logger = logger;
         this.cancellationTokenSource = cancellationTokenSource;
         this.protocolSerializer = protocolSerializer;
         this.messageSender = messageSender;
+    }
+
+    public async Task Start()
+    {
+        try
+        {
+            ReadConfig();
+            var listener = Task.Run(() => RunListener());
+            var receiver = Task.Run(() => RunReceiver());
+        }
+        catch (Exception e)
+        {
+            logger.Error("Main loop got error", e);
+        }
+    }
+
+    private void ReadConfig()
+    {
+        string json = File.ReadAllText(pathToRoomDefinition);
+        roomDefintion = roomDefinitionParser.Parse(json);
     }
 
     public void RunListener()
@@ -67,7 +93,7 @@ public class EscapeRoomSocketServer
                     else
                     {
                         client = new Client(remote);
-                        var clientMessageReceiver = new ClientMessageReceiver(client, messageSender);
+                        var clientMessageReceiver = new ClientMessageReceiver(client, messageSender, roomDefintion);
                         client.Init();
                         clients[socketAddress] = client;
                         receivers[client] = clientMessageReceiver;

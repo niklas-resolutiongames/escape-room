@@ -66,7 +66,7 @@ namespace RG.EscapeRoomProtocol
             lock (scratchStream)
             {
                 size += Write(LoadRoomMessage.ID, scratchStream);
-                size += Write(message.roomId, scratchStream);
+                size += Write(message.roomDefinitionId, scratchStream);
                 size += Write((ushort) size, stream);
                 stream.Write(buffer, 0, size);
                 scratchStream.SetLength(0);

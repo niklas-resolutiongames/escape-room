@@ -8,6 +8,7 @@
     ],
     "references": [
         "EscapeRoom",
-        "EscapeRoomProtocol"
+        "EscapeRoomProtocol",
+        "EscapeRoomModel"
     ]
 }

@@ -21,6 +21,7 @@ namespace RG.EscapeRoom.Model.Rooms
     [Serializable]
     public struct RoomDefinition
     {
+        public string roomDefinitionId;
         public string scene;
         public PuzzleDefinition[] puzzles;
     }

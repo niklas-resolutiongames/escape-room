@@ -1,6 +1,5 @@
-﻿    using System.Collections;
-    using System.Collections.Generic;
-    using System.IO;
+﻿using System.Collections;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -10,6 +9,7 @@ using NUnit.Framework;
 using RG.EscapeRoomProtocol;
 using RG.EscapeRoomProtocol.Messages;
 using RG.EscapeRoomServer.Server;
+using RG.Tests;
 using UnityEngine;
 using UnityEngine.TestTools;
 
@@ -35,15 +35,14 @@ namespace RG.EscapeRoomPlayModeTests.Server
             protocolSerializer = new ProtocolSerializer();
             testMessageReceiver = new TestMessageReceiver();
             var serverFactory = new ServerFactory(unityTestLogger, cancellationTokenSource);
-            escapeRoomSocketServer = serverFactory.CreateServer(port);
-            Task.Run(() => escapeRoomSocketServer.RunListener());
-            Task.Run(() => escapeRoomSocketServer.RunReceiver());
+            escapeRoomSocketServer = serverFactory.CreateServer(port, TestUtil.PathToFile("Assets/RG/EscapeRoomPlayModeTests/SingleLever/SingleLeverFactoryTestRoomDefinition.json"));
+            escapeRoomSocketServer.Start();
             serverEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), port);
             clientEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), port+1);
             yield return null;
         }
         [UnityTest]
-        public IEnumerator TestClientHello()
+        public IEnumerator TestClientConnectReceivesLoadRoom()
         {
             var timeAtStart = Time.time;
             UdpClient client = new UdpClient(clientEndPoint);
@@ -58,7 +57,7 @@ namespace RG.EscapeRoomPlayModeTests.Server
             Assert.IsFalse(escapeRoomSocketServer.IsRunning());
             Assert.AreEqual(1, testMessageReceiver.messages.Count);
             LoadRoomMessage loadRoomMessage = (LoadRoomMessage) testMessageReceiver.messages[0];
-            Assert.AreEqual("abc123", loadRoomMessage.roomId);
+            Assert.AreEqual("SingleLeverTestScene", loadRoomMessage.roomDefinitionId);
         }
 
         private IEnumerator SendMessage(UdpClient client, ClientConnectMessage message)

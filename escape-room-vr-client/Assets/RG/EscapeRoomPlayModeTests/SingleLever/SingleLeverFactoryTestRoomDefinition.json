@@ -1,4 +1,5 @@
 {
+  "roomDefinitionId": "SingleLeverTestScene",
   "scene": "TestScene",
   "puzzles": [
     {

@@ -13,11 +13,11 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{c3f1aaad-f8e3-c14e-95c0-cb5d35f7ad42}</ProjectGuid>
+    <ProjectGuid>{acf40201-1b74-fa3b-3375-d2fb919b8e61}</ProjectGuid>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <AssemblyName>Tests</AssemblyName>
+    <AssemblyName>EscapeRoomModel</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <BaseDirectory>.</BaseDirectory>
@@ -52,12 +52,13 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets\RG\EscapeRoomPlayModeTests\TestMotionHelper.cs" />
-     <Compile Include="Assets\RG\EscapeRoomPlayModeTests\TestUtil.cs" />
-     <Compile Include="Assets\RG\EscapeRoomPlayModeTests\UnityTestLogger.cs" />
-     <Compile Include="Assets\RG\EscapeRoomPlayModeTests\SingleLever\SingleLeverFactoryTest.cs" />
-     <Compile Include="Assets\RG\EscapeRoomPlayModeTests\Server\ConnectToServerTest.cs" />
-     <None Include="Assets\RG\EscapeRoomPlayModeTests\Tests.asmdef" />
+     <Compile Include="Assets\RG\EscapeRoomModel\Model\Math\Vector3.cs" />
+     <Compile Include="Assets\RG\EscapeRoomModel\Model\Rooms\RoomDefinitionParser.cs" />
+     <Compile Include="Assets\RG\EscapeRoomModel\Model\Math\Quaternion.cs" />
+     <Compile Include="Assets\RG\EscapeRoomModel\Model\Puzzles\PuzzleDefinition.cs" />
+     <Compile Include="Assets\RG\EscapeRoomModel\Model\Rooms\RoomModelFactory.cs" />
+     <Compile Include="Assets\RG\EscapeRoomModel\Model\Puzzles\SingleLever\SingleLeverModel.cs" />
+     <None Include="Assets\RG\EscapeRoomModel\EscapeRoomModel.asmdef" />
  <Reference Include="UnityEngine">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2020.3.24f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
  </Reference>
@@ -280,8 +281,26 @@
  <Reference Include="UnityEditor.UnityConnectModule">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2020.3.24f1/Editor/Data/Managed/UnityEngine/UnityEditor.UnityConnectModule.dll</HintPath>
  </Reference>
- <Reference Include="nunit.framework">
- <HintPath>C:/Users/Niklas Gawell/Projects/escape-room/escape-room-vr-client/Library/PackageCache/com.unity.ext.nunit@1.0.6/net35/unity-custom/nunit.framework.dll</HintPath>
+ <Reference Include="UnityEditor.Graphs">
+ <HintPath>C:/Program Files/Unity/Hub/Editor/2020.3.24f1/Editor/Data/Managed/UnityEditor.Graphs.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.WindowsStandalone.Extensions">
+ <HintPath>C:/Program Files/Unity/Hub/Editor/2020.3.24f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
+ </Reference>
+ <Reference Include="Unity.Plastic.Newtonsoft.Json">
+ <HintPath>C:/Users/Niklas Gawell/Projects/escape-room/escape-room-vr-client/Library/PackageCache/com.unity.collab-proxy@1.15.4/Lib/Editor/PlasticSCM/Unity.Plastic.Newtonsoft.Json.dll</HintPath>
+ </Reference>
+ <Reference Include="Unity.Plastic.Antlr3.Runtime">
+ <HintPath>C:/Users/Niklas Gawell/Projects/escape-room/escape-room-vr-client/Library/PackageCache/com.unity.collab-proxy@1.15.4/Lib/Editor/PlasticSCM/Unity.Plastic.Antlr3.Runtime.dll</HintPath>
+ </Reference>
+ <Reference Include="unityplastic">
+ <HintPath>C:/Users/Niklas Gawell/Projects/escape-room/escape-room-vr-client/Library/PackageCache/com.unity.collab-proxy@1.15.4/Lib/Editor/PlasticSCM/unityplastic.dll</HintPath>
+ </Reference>
+ <Reference Include="log4netPlastic">
+ <HintPath>C:/Users/Niklas Gawell/Projects/escape-room/escape-room-vr-client/Library/PackageCache/com.unity.collab-proxy@1.15.4/Lib/Editor/PlasticSCM/log4netPlastic.dll</HintPath>
+ </Reference>
+ <Reference Include="Newtonsoft.Json">
+ <HintPath>C:/Users/Niklas Gawell/Projects/escape-room/escape-room-vr-client/Library/PackageCache/com.unity.nuget.newtonsoft-json@2.0.0/Runtime/Newtonsoft.Json.dll</HintPath>
  </Reference>
  <Reference Include="netstandard">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2020.3.24f1/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>
@@ -628,12 +647,6 @@
  <Reference Include="System.Xml.Serialization">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2020.3.24f1/Editor/Data/NetStandard/compat/2.0.0/shims/netfx/System.Xml.Serialization.dll</HintPath>
  </Reference>
- <Reference Include="UnityEngine.TestRunner">
- <HintPath>C:/Users/Niklas Gawell/Projects/escape-room/escape-room-vr-client/Library/ScriptAssemblies/UnityEngine.TestRunner.dll</HintPath>
- </Reference>
- <Reference Include="UnityEditor.TestRunner">
- <HintPath>C:/Users/Niklas Gawell/Projects/escape-room/escape-room-vr-client/Library/ScriptAssemblies/UnityEditor.TestRunner.dll</HintPath>
- </Reference>
  <Reference Include="UnityEditor.UI">
  <HintPath>C:/Users/Niklas Gawell/Projects/escape-room/escape-room-vr-client/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
  </Reference>
@@ -642,21 +655,9 @@
  </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="EscapeRoom.csproj">
-      <Project>{c4c35276-8943-d4c4-5ecc-23aebbe0db02}</Project>
-      <Name>EscapeRoom</Name>
-    </ProjectReference>
-    <ProjectReference Include="EscapeRoomServer.csproj">
-      <Project>{d9269cb8-f5fd-80f6-9df6-54ada98801f8}</Project>
-      <Name>EscapeRoomServer</Name>
-    </ProjectReference>
     <ProjectReference Include="EscapeRoomProtocol.csproj">
       <Project>{f6944fa1-2e6b-8e75-9b6f-5796e80acc79}</Project>
       <Name>EscapeRoomProtocol</Name>
-    </ProjectReference>
-    <ProjectReference Include="EscapeRoomModel.csproj">
-      <Project>{acf40201-1b74-fa3b-3375-d2fb919b8e61}</Project>
-      <Name>EscapeRoomModel</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

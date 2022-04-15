@@ -3,11 +3,11 @@
     public struct LoadRoomMessage
     {
         public const ushort ID = 1;
-        public string roomId;
+        public string roomDefinitionId;
 
-        public LoadRoomMessage(string roomId)
+        public LoadRoomMessage(string roomDefinitionId)
         {
-            this.roomId = roomId;
+            this.roomDefinitionId = roomDefinitionId;
         }
     }
 }
