@@ -53,7 +53,11 @@
   </PropertyGroup>
   <ItemGroup>
      <Compile Include="Assets\RG\EscapeRoomProtocol\ProtocolSerializer.cs" />
-     <Compile Include="Assets\RG\EscapeRoomProtocol\Messages\ClientHelloMessage.cs" />
+     <Compile Include="Assets\RG\EscapeRoomProtocol\Messages\ClientConnectMessage.cs" />
+     <Compile Include="Assets\RG\EscapeRoomProtocol\Messages\LoadRoomMessage.cs" />
+     <Compile Include="Assets\RG\EscapeRoomProtocol\ByteUtil.cs" />
+     <Compile Include="Assets\RG\EscapeRoomProtocol\TestMessageReceiver.cs" />
+     <Compile Include="Assets\RG\EscapeRoomProtocol\MessageReceiver.cs" />
      <None Include="Assets\RG\EscapeRoomProtocol\EscapeRoomProtocol.asmdef" />
  <Reference Include="UnityEngine">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2020.3.24f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>

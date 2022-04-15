@@ -53,6 +53,9 @@
   </PropertyGroup>
   <ItemGroup>
      <Compile Include="Assets\RG\EscapeRoomServer\Server\EscapeRoomSocketServer.cs" />
+     <Compile Include="Assets\RG\EscapeRoomServer\Server\ServerFactory.cs" />
+     <Compile Include="Assets\RG\EscapeRoomServer\Server\MessageSender.cs" />
+     <Compile Include="Assets\RG\EscapeRoomServer\Server\MessageReceiver.cs" />
      <None Include="Assets\RG\EscapeRoomServer\EscapeRoomServer.asmdef" />
  <Reference Include="UnityEngine">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2020.3.24f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>

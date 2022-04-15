@@ -4,23 +4,32 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Threading.Tasks;
+using RG.EscapeRoomProtocol;
+using RG.EscapeRoomServer.Server;
 
 public class EscapeRoomSocketServer
 {
     private readonly int port;
     private readonly ILogger logger;
     private readonly CancellationTokenSource cancellationTokenSource;
+    private readonly ProtocolSerializer protocolSerializer;
+    private readonly MessageSender messageSender;
     private bool isRunning = false;
     private Dictionary<SocketAddress, Client> clients = new Dictionary<SocketAddress, Client>();
+    private Dictionary<Client, ClientMessageReceiver> receivers = new Dictionary<Client, ClientMessageReceiver>();
+    private Queue<Client> clientsToProcess = new Queue<Client>();
 
-    public EscapeRoomSocketServer(int port, ILogger logger, CancellationTokenSource cancellationTokenSource)
+    public EscapeRoomSocketServer(int port, ILogger logger, CancellationTokenSource cancellationTokenSource, ProtocolSerializer protocolSerializer, MessageSender messageSender)
     {
         this.port = port;
         this.logger = logger;
         this.cancellationTokenSource = cancellationTokenSource;
+        this.protocolSerializer = protocolSerializer;
+        this.messageSender = messageSender;
     }
 
-    public async void Start()
+    public void RunListener()
     {   
         isRunning = true;
         Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
@@ -34,30 +43,43 @@ public class EscapeRoomSocketServer
             while (!cancellationTokenSource.IsCancellationRequested)
             {
                 logger.Info($"[Server] Waiting for data...");
-                var numberOfReceivedBytes = socket.ReceiveFrom(data, ref remote);
+                int numberOfReceivedBytes = 0;
+                try
+                {
+                    numberOfReceivedBytes = socket.ReceiveFrom(data, ref remote);
+                }
+                catch (SocketException e)
+                {
+                    if (e.SocketErrorCode != SocketError.TimedOut)
+                    {
+                        throw e;
+                    }
+                }
+
                 if (numberOfReceivedBytes > 0)
                 {
                     var socketAddress = remote.Serialize();
                     Client client;
                     if (clients.ContainsKey(socketAddress))
                     {
-                        logger.Info($"Returning client {socketAddress} sent {numberOfReceivedBytes} bytes");
                         client = clients[socketAddress];
-                        socket.SendTo(data, numberOfReceivedBytes, SocketFlags.None, client.endPoint);
-                        logger.Info($"[Server] sent {numberOfReceivedBytes} bytes");
                     }
                     else
                     {
-                        logger.Info($"New client {socketAddress} sent {numberOfReceivedBytes} bytes");
                         client = new Client(remote);
+                        var clientMessageReceiver = new ClientMessageReceiver(client, messageSender);
                         client.Init();
                         clients[socketAddress] = client;
+                        receivers[client] = clientMessageReceiver;
                         remote = CreateEndPoint();
                     }
+                    logger.Info($"Client {socketAddress} sent {numberOfReceivedBytes} bytes: {ByteUtil.ByteArrayToString(data, 0, numberOfReceivedBytes)}");
 
                     client.ReceiveData(data,numberOfReceivedBytes);
+                    clientsToProcess.Enqueue(client);
                 }
 
+                Task.Yield();
             }
         }
         catch (Exception e)
@@ -65,11 +87,27 @@ public class EscapeRoomSocketServer
             logger.Error("Error", e);
         } finally
         {
-          socket.Close();  
+            socket.Close();  
         }
 
         isRunning = false;
         logger.Info($"[Server] shut down");
+        
+    }
+
+    public void RunReceiver()
+    {
+        while (!cancellationTokenSource.IsCancellationRequested)
+        {
+            if (clientsToProcess.Count > 0)
+            {
+                var client = clientsToProcess.Dequeue();
+                MessageReceiver messageReceiver = receivers[client];
+                protocolSerializer.DeserializeNextMessage(client.bufferedStream, messageReceiver);
+            }
+
+            Task.Yield();
+        }
     }
 
     private EndPoint CreateEndPoint()
@@ -84,11 +122,11 @@ public class EscapeRoomSocketServer
     
 }
 
-internal class Client
+public class Client
 {
-    public EndPoint endPoint;
+    public readonly EndPoint endPoint;
     private byte[] buffer;
-    private BufferedStream bufferedStream;
+    public BufferedStream bufferedStream;
 
     public Client(EndPoint endPoint)
     {

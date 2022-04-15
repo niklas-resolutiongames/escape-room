@@ -15,7 +15,7 @@ namespace RG.EscapeRoom.Wiring.Factories
         {
             if (cachedPlayerReference != null) return cachedPlayerReference;
             cachedPlayerReference = Instantiate(xrPlayerSettings.playerReference);
-            while (cachedPlayerReference == null) Task.Yield();
+            while (cachedPlayerReference == null) await Task.Yield();
             return cachedPlayerReference;
         }
     }

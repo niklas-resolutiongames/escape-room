@@ -8,11 +8,13 @@ public class UnityTestLogger : ILogger
     public void Info(string message)
     {
         messagesToLog.Enqueue(new LogMessage(message, null,Level.Info));
+        OutputLog();
     }
 
     public void Error(string error, Exception exception)
     {
         messagesToLog.Enqueue(new LogMessage(error, exception,Level.Error));
+        OutputLog();
     }
 
     public void OutputLog()
