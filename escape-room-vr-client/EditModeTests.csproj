@@ -53,8 +53,8 @@
   </PropertyGroup>
   <ItemGroup>
      <Compile Include="Assets\RG\EscapeRoomEditModeTests\Controller\Puzzles\SingleLever\SingleLeverControllerTest.cs" />
-     <Compile Include="Assets\RG\EscapeRoomEditModeTests\Protocol\ProtocolSerializerTest.cs" />
      <Compile Include="Assets\RG\EscapeRoomEditModeTests\Protocol\ByteFifoBufferTest.cs" />
+     <Compile Include="Assets\RG\EscapeRoomEditModeTests\Protocol\ProtocolSerializerTest.cs" />
      <None Include="Assets\RG\EscapeRoomEditModeTests\EditModeTests.asmdef" />
  <Reference Include="UnityEngine">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2020.3.24f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>

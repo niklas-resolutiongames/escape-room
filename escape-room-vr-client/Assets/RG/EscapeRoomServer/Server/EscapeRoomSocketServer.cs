@@ -18,13 +18,16 @@ public class EscapeRoomSocketServer
     private readonly CancellationTokenSource cancellationTokenSource;
     private readonly ProtocolSerializer protocolSerializer;
     private readonly MessageSender messageSender;
+    private int timeoutsUntilStop;
     private bool isRunning = false;
     private Dictionary<SocketAddress, Client> clients = new Dictionary<SocketAddress, Client>();
     private Dictionary<Client, ClientMessageReceiver> receivers = new Dictionary<Client, ClientMessageReceiver>();
     private Queue<Client> clientsToProcess = new Queue<Client>();
     private RoomDefinition roomDefintion;
 
-    public EscapeRoomSocketServer(int port, string pathToRoomDefinition, RoomDefinitionParser roomDefinitionParser, ILogger logger, CancellationTokenSource cancellationTokenSource, ProtocolSerializer protocolSerializer, MessageSender messageSender)
+    public EscapeRoomSocketServer(int port, string pathToRoomDefinition, RoomDefinitionParser roomDefinitionParser,
+        ILogger logger, CancellationTokenSource cancellationTokenSource, ProtocolSerializer protocolSerializer,
+        MessageSender messageSender, int timeoutsUntilStop)
     {
         this.port = port;
         this.pathToRoomDefinition = pathToRoomDefinition;
@@ -33,6 +36,7 @@ public class EscapeRoomSocketServer
         this.cancellationTokenSource = cancellationTokenSource;
         this.protocolSerializer = protocolSerializer;
         this.messageSender = messageSender;
+        this.timeoutsUntilStop = timeoutsUntilStop;
     }
 
     public async Task Start()
@@ -76,7 +80,15 @@ public class EscapeRoomSocketServer
                 }
                 catch (SocketException e)
                 {
-                    if (e.SocketErrorCode != SocketError.TimedOut)
+                    if (e.SocketErrorCode == SocketError.TimedOut)
+                    {
+                        if (timeoutsUntilStop == 1)
+                        {
+                            cancellationTokenSource.Cancel();
+                        }
+
+                        timeoutsUntilStop--;
+                    } else
                     {
                         throw e;
                     }

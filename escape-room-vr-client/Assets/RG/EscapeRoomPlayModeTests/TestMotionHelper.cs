@@ -20,7 +20,7 @@ namespace RG.Tests
                 TickAllBackgroundTickables();
                 if (playerReference != null)
                 {
-                    Vector3 pointBetweenHands = (playerReference.leftHand.transform.position + playerReference.leftHand.transform.position) / 2;
+                    Vector3 pointBetweenHands = (playerReference.leftHand.transform.position + playerReference.rightHand.transform.position) / 2;
                     playerReference.head.transform.LookAt(pointBetweenHands);
                 }
                 yield return null;

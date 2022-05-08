@@ -19,14 +19,13 @@ public class SingleLeverFactoryTest
     public IEnumerator SetUp()
     {
         testMotionHelper = new TestMotionHelper();            
-        escapeRoomSocketServer = ServerTestUtils.StartServer(12345);
+        escapeRoomSocketServer = ServerTestUtils.StartServer(12345, 30);
         var gameClientFactory = new GameClientFactory();
         GameClientFactory.TESTING_ROOM_JSON = TestUtil.ReadTextFile(
             "Assets/RG/EscapeRoomPlayModeTests/SingleLever/SingleLeverFactoryTestRoomDefinition.json");
         gameClient = gameClientFactory.CreateGameClient();
         gameClient.Connect(12345, "127.0.0.1");
         
-        testMotionHelper.SetPlayerReference(gameClient.playerReference);
         testMotionHelper.TickInBackground(gameClient);
 
         yield return testMotionHelper.Await(Task.Run(async () =>
@@ -36,10 +35,11 @@ public class SingleLeverFactoryTest
                 await Task.Yield();
             }
         }));
+        testMotionHelper.SetPlayerReference(gameClient.playerReference);
         yield return null;
     }
 
-    [TearDown]
+    [UnityTearDown]
     public void StopServer()
     {
         ServerTestUtils.StopServer();
