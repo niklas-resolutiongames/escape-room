@@ -9,8 +9,7 @@ namespace RG.EscapeRoomServer.Server
     {
         private readonly Socket socket;
         private readonly ProtocolSerializer protocolSerializer;
-        private MemoryStream scratchStream;
-        private byte[] scratchBuffer;
+        private ByteFifoBuffer byteBuffer;
 
         public UdpMessageSender(Socket socket, ProtocolSerializer protocolSerializer)
         {
@@ -20,16 +19,15 @@ namespace RG.EscapeRoomServer.Server
 
         public void Init()
         {
-            scratchBuffer = new byte[1024];
-            scratchStream = new MemoryStream(scratchBuffer);
+            byteBuffer = new ByteFifoBuffer(1024);
         }
 
         public void SendMessage(Client client, LoadRoomMessage loadRoomMessage)
         {
-            lock (scratchStream)
+            lock (byteBuffer)
             {
-                int numberOfBytes = protocolSerializer.SerializeMessage(loadRoomMessage, scratchStream);
-                socket.SendTo(scratchBuffer, numberOfBytes, SocketFlags.None, client.endPoint);
+                int numberOfBytes = protocolSerializer.SerializeMessage(loadRoomMessage, byteBuffer);
+                socket.SendTo(byteBuffer.ReadAllAsArray(), numberOfBytes, SocketFlags.None, client.endPoint);
             }
         }
     }

@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -62,18 +61,17 @@ namespace RG.EscapeRoomPlayModeTests.Server
 
         private IEnumerator SendMessage(UdpClient client, ClientConnectMessage message)
         {
-            byte[] data = new byte[1024];
-            var memoryStream = new MemoryStream(data);
-            var numberOfBytes = protocolSerializer.SerializeMessage(message, memoryStream);
-            unityTestLogger.Info($"Sending {ByteUtil.ByteArrayToString(data, 0, numberOfBytes)} to server");
-            var sendMessageTask = client.SendAsync(data, numberOfBytes, serverEndPoint);
+            ByteFifoBuffer buffer = new ByteFifoBuffer(1024);
+            var numberOfBytes = protocolSerializer.SerializeMessage(message, buffer);
+            var sendMessageTask = client.SendAsync(buffer.ReadAllAsArray(), numberOfBytes, serverEndPoint);
             while (sendMessageTask.Status < TaskStatus.RanToCompletion) { yield return null; }
         }
 
         private IEnumerator ReceiveMessage(byte[] buffer)
         {
-            var stream = new MemoryStream(buffer);
-            var receiveTask = protocolSerializer.DeserializeNextMessage(stream, testMessageReceiver);
+            ByteFifoBuffer byteFifoBuffer = new ByteFifoBuffer(buffer.Length);
+            byteFifoBuffer.Write(buffer, 0, buffer.Length);
+            var receiveTask = protocolSerializer.DeserializeNextMessage(byteFifoBuffer, testMessageReceiver);
             while (receiveTask.Status < TaskStatus.RanToCompletion) { yield return null; }
         }
     }

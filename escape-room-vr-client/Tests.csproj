@@ -57,6 +57,7 @@
      <Compile Include="Assets\RG\EscapeRoomPlayModeTests\UnityTestLogger.cs" />
      <Compile Include="Assets\RG\EscapeRoomPlayModeTests\SingleLever\SingleLeverFactoryTest.cs" />
      <Compile Include="Assets\RG\EscapeRoomPlayModeTests\Server\ConnectToServerTest.cs" />
+     <Compile Include="Assets\RG\EscapeRoomPlayModeTests\ServerTestUtils.cs" />
      <None Include="Assets\RG\EscapeRoomPlayModeTests\Tests.asmdef" />
  <Reference Include="UnityEngine">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2020.3.24f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>

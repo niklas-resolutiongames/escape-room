@@ -129,7 +129,7 @@ public class EscapeRoomSocketServer
             {
                 var client = clientsToProcess.Dequeue();
                 MessageReceiver messageReceiver = receivers[client];
-                protocolSerializer.DeserializeNextMessage(client.bufferedStream, messageReceiver);
+                protocolSerializer.DeserializeNextMessage(client.byteBuffer, messageReceiver);
             }
 
             Task.Yield();
@@ -151,8 +151,7 @@ public class EscapeRoomSocketServer
 public class Client
 {
     public readonly EndPoint endPoint;
-    private byte[] buffer;
-    public BufferedStream bufferedStream;
+    public ByteFifoBuffer byteBuffer;
 
     public Client(EndPoint endPoint)
     {
@@ -161,13 +160,12 @@ public class Client
 
     public void Init()
     {
-        buffer = new byte[1024];
-        bufferedStream = new BufferedStream(new MemoryStream(buffer));
+        byteBuffer = new ByteFifoBuffer(1024);
     }
 
     public void ReceiveData(byte[] data, int numberOfBytes)
     {
-        bufferedStream.Write(data, 0, numberOfBytes);
+        byteBuffer.Write(data, 0, numberOfBytes);
     }
 }
 

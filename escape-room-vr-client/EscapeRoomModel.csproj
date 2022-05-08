@@ -52,12 +52,12 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets\RG\EscapeRoomModel\Model\Math\Vector3.cs" />
      <Compile Include="Assets\RG\EscapeRoomModel\Model\Rooms\RoomDefinitionParser.cs" />
-     <Compile Include="Assets\RG\EscapeRoomModel\Model\Math\Quaternion.cs" />
-     <Compile Include="Assets\RG\EscapeRoomModel\Model\Puzzles\PuzzleDefinition.cs" />
      <Compile Include="Assets\RG\EscapeRoomModel\Model\Rooms\RoomModelFactory.cs" />
+     <Compile Include="Assets\RG\EscapeRoomModel\Model\Math\Vector3.cs" />
+     <Compile Include="Assets\RG\EscapeRoomModel\Model\Puzzles\PuzzleDefinition.cs" />
      <Compile Include="Assets\RG\EscapeRoomModel\Model\Puzzles\SingleLever\SingleLeverModel.cs" />
+     <Compile Include="Assets\RG\EscapeRoomModel\Model\Math\Quaternion.cs" />
      <None Include="Assets\RG\EscapeRoomModel\EscapeRoomModel.asmdef" />
  <Reference Include="UnityEngine">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2020.3.24f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>

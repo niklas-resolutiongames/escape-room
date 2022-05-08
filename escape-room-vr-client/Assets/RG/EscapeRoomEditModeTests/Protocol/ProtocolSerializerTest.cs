@@ -8,16 +8,13 @@ namespace RG.EscapeRoomEditModeTests.Protocol
     public class ProtocolSerializerTest
     {
         private ProtocolSerializer protocolSerializer;
-        private MemoryStream writeStream;
         private TestMessageReceiver testMessageReceiver;
-        private MemoryStream readStream;
+        private ByteFifoBuffer byteFifoBuffer;
 
         [SetUp]
         public void SetUp()
         {
-            var buffer = new byte[1024];
-            writeStream = new MemoryStream(buffer);
-            readStream = new MemoryStream(buffer);
+            byteFifoBuffer = new ByteFifoBuffer(1024);
             testMessageReceiver = new TestMessageReceiver();
             protocolSerializer = new ProtocolSerializer();
         }
@@ -27,8 +24,8 @@ namespace RG.EscapeRoomEditModeTests.Protocol
         {
             string roomId = "abc123";
             var message = new LoadRoomMessage(roomId);
-            protocolSerializer.SerializeMessage(message, writeStream);
-            protocolSerializer.DeserializeNextMessage(readStream, testMessageReceiver);
+            protocolSerializer.SerializeMessage(message, byteFifoBuffer);
+            protocolSerializer.DeserializeNextMessage(byteFifoBuffer, testMessageReceiver);
             var deserializedMessage = (LoadRoomMessage) testMessageReceiver.messages[0];
             Assert.AreEqual(roomId, deserializedMessage.roomDefinitionId);
         }
