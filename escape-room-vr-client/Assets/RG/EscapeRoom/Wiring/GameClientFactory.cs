@@ -16,18 +16,18 @@ namespace RG.EscapeRoom.Wiring
 
         public GameClient CreateGameClient()
         {
+            var incomingMessagesData = new IncomingMessagesData();
             var interactionDatas = InteractionHandlers.CreateDatas();
             var roomDefinitionParser = new RoomDefinitionParser();
             ProtocolSerializer protocolSerializer = new ProtocolSerializer();
-            var messageSender = new MessageSender(protocolSerializer);
+            var messageSender = new MessageSender(protocolSerializer, incomingMessagesData);
             messageSender.Init();
-            var incomingMessagesData = new IncomingMessagesData();
             var clientNetworkHandler = new ClientNetworkHandler(messageSender, protocolSerializer, new ClientMessageReceiver(incomingMessagesData));
             var roomFactory =
                 AssetDatabase.LoadAssetAtPath<RoomFactory>("Assets/RG/EscapeRoom/Wiring/Factories/RoomFactory.asset");
             var controllerButtonData = new ControllerButtonData();
 
-            return new GameClient(interactionDatas, roomDefinitionParser, roomFactory, controllerButtonData, clientNetworkHandler, incomingMessagesData);
+            return new GameClient(interactionDatas, roomDefinitionParser, roomFactory, controllerButtonData, clientNetworkHandler, incomingMessagesData, messageSender);
         }
     }
 
@@ -39,6 +39,7 @@ namespace RG.EscapeRoom.Wiring
         public readonly ControllerButtonData controllerButtonData;
         private readonly ClientNetworkHandler clientNetworkHandler;
         private readonly IncomingMessagesData incomingMessagesData;
+        private readonly MessageSender messageSender;
 
         public RoomDefinition roomDefinition;
         public Room room;
@@ -46,7 +47,7 @@ namespace RG.EscapeRoom.Wiring
         public InteractionHandlers interactionHandlers;
         public bool roomIsLoaded = false;
 
-        public GameClient(InteractionDatas interactionDatas, RoomDefinitionParser roomDefinitionParser, RoomFactory roomFactory, ControllerButtonData controllerButtonData, ClientNetworkHandler clientNetworkHandler, IncomingMessagesData incomingMessagesData)
+        public GameClient(InteractionDatas interactionDatas, RoomDefinitionParser roomDefinitionParser, RoomFactory roomFactory, ControllerButtonData controllerButtonData, ClientNetworkHandler clientNetworkHandler, IncomingMessagesData incomingMessagesData, MessageSender messageSender)
         {
             this.interactionDatas = interactionDatas;
             this.roomDefinitionParser = roomDefinitionParser;
@@ -54,6 +55,7 @@ namespace RG.EscapeRoom.Wiring
             this.controllerButtonData = controllerButtonData;
             this.clientNetworkHandler = clientNetworkHandler;
             this.incomingMessagesData = incomingMessagesData;
+            this.messageSender = messageSender;
         }
 
         public void Connect(int serverPort, string serverIp)
@@ -61,7 +63,7 @@ namespace RG.EscapeRoom.Wiring
             clientNetworkHandler.Connect(serverPort, serverIp);
         }
 
-        public async Task LoadRoom(string json)
+        private async Task LoadRoom(string json)
         {
             roomDefinition = roomDefinitionParser.Parse(json);
 
@@ -71,13 +73,13 @@ namespace RG.EscapeRoom.Wiring
             room = createRoomTask.Result;
             playerReference = room.playerReference;
             interactionHandlers =
-                new InteractionHandlers(controllerButtonData, playerReference.leftHand, playerReference.rightHand, interactionDatas);
+                new InteractionHandlers(controllerButtonData, playerReference.leftHand, playerReference.rightHand, interactionDatas, new RealTimeProvider(), messageSender, incomingMessagesData);
 
             playerReference.head.transform.position = new Vector3(0f, 1.8f, 0f);
             playerReference.leftHand.transform.position = new Vector3(.2f, 1.5f, -.2f);
             playerReference.rightHand.transform.position = new Vector3(.2f, 1.5f, .2f);
         
-            interactionHandlers.InitializeHandlers();
+            interactionHandlers.InitializeHandlers(room);
             roomIsLoaded = true;
         }
 
@@ -98,7 +100,7 @@ namespace RG.EscapeRoom.Wiring
             if (incomingMessagesData.loadRoomMessages.Count > 0)
             {
                 var loadRoomMessage = incomingMessagesData.loadRoomMessages.Dequeue();
-                var createRoomTask = LoadRoom(GameClientFactory.TESTING_ROOM_JSON);
+                await LoadRoom(GameClientFactory.TESTING_ROOM_JSON);
             }
         }
 

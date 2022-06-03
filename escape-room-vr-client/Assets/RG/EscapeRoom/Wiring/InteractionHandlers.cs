@@ -1,6 +1,8 @@
 ﻿using RG.EscapeRoom.Controller.Interaction;
 using RG.EscapeRoom.Controller.Player;
 using RG.EscapeRoom.Interaction;
+using RG.EscapeRoom.Networking;
+using RG.EscapeRoom.Wiring.Factories;
 
 namespace RG.EscapeRoom.Wiring
 {
@@ -16,17 +18,22 @@ namespace RG.EscapeRoom.Wiring
         private readonly XRPlayerHandReference leftHandReference;
         private readonly XRPlayerHandReference rightHandReference;
         private readonly InteractionDatas interactionDatas;
+        private readonly ITimeProvider timeProvider;
+        private readonly MessageSender messageSender;
+        private readonly IncomingMessagesData incomingMessagesData;
 
         private HandPullHandler handPullHandler;
         private GrabHandler grabHandler;
 
-        public InteractionHandlers(ControllerButtonData controllerButtonData, XRPlayerHandReference leftHandReference,
-            XRPlayerHandReference rightHandReference, InteractionDatas interactionDatas)
+        public InteractionHandlers(ControllerButtonData controllerButtonData, XRPlayerHandReference leftHandReference, XRPlayerHandReference rightHandReference, InteractionDatas interactionDatas, ITimeProvider timeProvider, MessageSender messageSender, IncomingMessagesData incomingMessagesData)
         {
             this.controllerButtonData = controllerButtonData;
             this.leftHandReference = leftHandReference;
             this.rightHandReference = rightHandReference;
             this.interactionDatas = interactionDatas;
+            this.timeProvider = timeProvider;
+            this.messageSender = messageSender;
+            this.incomingMessagesData = incomingMessagesData;
         }
 
         public void Tick()
@@ -43,10 +50,10 @@ namespace RG.EscapeRoom.Wiring
             return interactionDatas;
         }
 
-        public void InitializeHandlers()
+        public void InitializeHandlers(Room room)
         {
             grabHandler = new GrabHandler(controllerButtonData, interactionDatas.grabData, leftHandReference,
-                rightHandReference);
+                rightHandReference, timeProvider, messageSender, room, incomingMessagesData);
             handPullHandler = new HandPullHandler(interactionDatas.pullData, interactionDatas.grabData, leftHandReference,
                 rightHandReference);
         }

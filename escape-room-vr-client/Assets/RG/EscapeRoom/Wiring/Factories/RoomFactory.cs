@@ -88,5 +88,18 @@ namespace RG.EscapeRoom.Wiring.Factories
             this.roomModel = roomModel;
             this.puzzles = puzzles;
         }
+
+        public HandInteractableItemReference FindHandInteractableItemReference(string networkId)
+        {
+            foreach (var puzzle in puzzles)
+            {
+                if (puzzle.grabbables.ContainsKey(networkId))
+                {
+                    return puzzle.grabbables[networkId];
+                }
+            }
+
+            return null;
+        }
     }
 }

@@ -18,16 +18,17 @@ public class EscapeRoomSocketServer
     private readonly CancellationTokenSource cancellationTokenSource;
     private readonly ProtocolSerializer protocolSerializer;
     private readonly MessageSender messageSender;
+    private readonly HashSet<Client> allConnectedClients;
     private int timeoutsUntilStop;
     private bool isRunning = false;
     private Dictionary<SocketAddress, Client> clients = new Dictionary<SocketAddress, Client>();
-    private Dictionary<Client, ClientMessageReceiver> receivers = new Dictionary<Client, ClientMessageReceiver>();
+    private Dictionary<Client, ServerMessageReceiver> receivers = new Dictionary<Client, ServerMessageReceiver>();
     private Queue<Client> clientsToProcess = new Queue<Client>();
     private RoomDefinition roomDefintion;
 
     public EscapeRoomSocketServer(int port, string pathToRoomDefinition, RoomDefinitionParser roomDefinitionParser,
         ILogger logger, CancellationTokenSource cancellationTokenSource, ProtocolSerializer protocolSerializer,
-        MessageSender messageSender, int timeoutsUntilStop)
+        MessageSender messageSender, int timeoutsUntilStop, HashSet<Client> allConnectedClients)
     {
         this.port = port;
         this.pathToRoomDefinition = pathToRoomDefinition;
@@ -37,6 +38,7 @@ public class EscapeRoomSocketServer
         this.protocolSerializer = protocolSerializer;
         this.messageSender = messageSender;
         this.timeoutsUntilStop = timeoutsUntilStop;
+        this.allConnectedClients = allConnectedClients;
     }
 
     public async Task Start()
@@ -105,10 +107,11 @@ public class EscapeRoomSocketServer
                     else
                     {
                         client = new Client(remote);
-                        var clientMessageReceiver = new ClientMessageReceiver(client, messageSender, roomDefintion);
+                        var clientMessageReceiver = new ServerMessageReceiver(client, messageSender, roomDefintion);
                         client.Init();
                         clients[socketAddress] = client;
                         receivers[client] = clientMessageReceiver;
+                        allConnectedClients.Add(client);
                         remote = CreateEndPoint();
                     }
                     logger.Info($"Client {socketAddress} sent {numberOfReceivedBytes} bytes: {ByteUtil.ByteArrayToString(data, 0, numberOfReceivedBytes)}");

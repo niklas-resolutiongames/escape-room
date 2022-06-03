@@ -1,4 +1,6 @@
-﻿using RG.EscapeRoom.Controller.Interaction;
+﻿using System.Collections.Generic;
+using RG.EscapeRoom.Controller.Interaction;
+using RG.EscapeRoom.Controller.Player;
 using RG.EscapeRoom.Controller.Puzzles.SingleLever;
 using RG.EscapeRoom.Model.Puzzles;
 using RG.EscapeRoom.Model.Puzzles.SingleLever;
@@ -22,8 +24,15 @@ public class SingleLeverFactory : PuzzleFactory<SingleLeverModel>
         var gameObject = Object.Instantiate(singleLeverSettings.prefab.gameObject);
         gameObject.transform.SetPositionAndRotation(MathUtils.UnityVector3(puzzleDefinition.position), MathUtils.UnityQuaternion(puzzleDefinition.rotation));
         SingleLeverReference singleLeverReference = gameObject.GetComponent<SingleLeverReference>();
-        return new Puzzle(singleLeverReference, new SingleLeverController(pullData, singleLeverReference, singleLeverModel),
-            new SingleLeverViewController(singleLeverModel, singleLeverReference));
+        singleLeverReference.leverEnd.SetNetworkId($"{singleLeverModel.GetId()}-leverEnd");
+        var grabbables = new Dictionary<string, HandInteractableItemReference>();
+        grabbables[singleLeverReference.leverEnd.NetworkId()] = singleLeverReference.leverEnd;
+        
+        var puzzle = new Puzzle(new SingleLeverController(pullData, singleLeverReference, singleLeverModel),
+            singleLeverReference,
+            new SingleLeverViewController(singleLeverModel, singleLeverReference), 
+            grabbables);
+        return puzzle;
     }
 }
 

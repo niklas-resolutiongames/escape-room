@@ -5,7 +5,6 @@ namespace RG.EscapeRoom.Controller.Player
 {
     public class XRPlayerHandReference : MonoBehaviour
     {
-        public GameObject gameObject;
         public HashSet<HandInteractableItem> interactableItemsInContactWithHand = new HashSet<HandInteractableItem>();
 
         public void OnTriggerEnter(Collider other)
@@ -23,5 +22,6 @@ namespace RG.EscapeRoom.Controller.Player
 
     public interface HandInteractableItem
     {
+        public string NetworkId();
     }
 }

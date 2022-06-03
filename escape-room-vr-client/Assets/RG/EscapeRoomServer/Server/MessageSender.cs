@@ -1,4 +1,4 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
 using System.Net.Sockets;
 using RG.EscapeRoomProtocol;
 using RG.EscapeRoomProtocol.Messages;
@@ -9,12 +9,14 @@ namespace RG.EscapeRoomServer.Server
     {
         private readonly Socket socket;
         private readonly ProtocolSerializer protocolSerializer;
+        private readonly HashSet<Client> allConnectedClients;
         private ByteFifoBuffer byteBuffer;
 
-        public UdpMessageSender(Socket socket, ProtocolSerializer protocolSerializer)
+        public UdpMessageSender(Socket socket, ProtocolSerializer protocolSerializer, HashSet<Client> allConnectedClients)
         {
             this.socket = socket;
             this.protocolSerializer = protocolSerializer;
+            this.allConnectedClients = allConnectedClients;
         }
 
         public void Init()
@@ -30,10 +32,33 @@ namespace RG.EscapeRoomServer.Server
                 socket.SendTo(byteBuffer.ReadAllAsArray(), numberOfBytes, SocketFlags.None, client.endPoint);
             }
         }
+
+        public void SendMessage(Client client, ClientWelcomeMessage message)
+        {
+            lock (byteBuffer)
+            {
+                int numberOfBytes = protocolSerializer.SerializeMessage(message, byteBuffer);
+                socket.SendTo(byteBuffer.ReadAllAsArray(), numberOfBytes, SocketFlags.None, client.endPoint);
+            }
+        }
+        public void Broadcast(GrabResultMessage grabResultMessage)
+        {
+            lock (byteBuffer)
+            {
+                int numberOfBytes = protocolSerializer.SerializeMessage(grabResultMessage, byteBuffer);
+                var data = byteBuffer.ReadAllAsArray();
+                foreach (var client in allConnectedClients)
+                {
+                    socket.SendTo(data, numberOfBytes, SocketFlags.None, client.endPoint);
+                }
+            }
+        }
     }
 
     public interface MessageSender
     {
         void SendMessage(Client client, LoadRoomMessage loadRoomMessage);
+        void Broadcast(GrabResultMessage grabResultMessage);
+        void SendMessage(Client client, ClientWelcomeMessage message);
     }
 }

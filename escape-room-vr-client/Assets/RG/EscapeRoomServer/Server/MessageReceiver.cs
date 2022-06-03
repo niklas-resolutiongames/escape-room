@@ -4,13 +4,14 @@ using RG.EscapeRoomProtocol.Messages;
 
 namespace RG.EscapeRoomServer.Server
 {
-    public class ClientMessageReceiver : MessageReceiver
+    public class ServerMessageReceiver : MessageReceiver
     {
         private readonly Client client;
         private readonly MessageSender messageSender;
         private readonly RoomDefinition roomDefinition;
+        private int nextPlayerNetworkId;
 
-        public ClientMessageReceiver(Client client, MessageSender messageSender, RoomDefinition roomDefinition)
+        public ServerMessageReceiver(Client client, MessageSender messageSender, RoomDefinition roomDefinition)
         {
             this.client = client;
             this.messageSender = messageSender;
@@ -19,10 +20,25 @@ namespace RG.EscapeRoomServer.Server
 
         public void Receive(ClientConnectMessage message)
         {
+            messageSender.SendMessage(client, new ClientWelcomeMessage(nextPlayerNetworkId++));
             messageSender.SendMessage(client, new LoadRoomMessage(roomDefinition.roomDefinitionId));
         }
 
         public void Receive(LoadRoomMessage message)
+        {
+            
+        }
+
+        public void Receive(RequestGrabMessage message)
+        {
+            messageSender.Broadcast(new GrabResultMessage(message, true));
+        }
+
+        public void Receive(GrabResultMessage message)
+        {
+        }
+
+        public void Receive(ClientWelcomeMessage message)
         {
             
         }

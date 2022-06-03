@@ -1,4 +1,5 @@
-﻿using System.Net.Sockets;
+﻿using System.Collections.Generic;
+using System.Net.Sockets;
 using System.Threading;
 using RG.EscapeRoom.Model.Rooms;
 using RG.EscapeRoomProtocol;
@@ -20,10 +21,11 @@ namespace RG.EscapeRoomServer.Server
         {
             var protocolSerializer = new ProtocolSerializer();
             Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-            var udpMessageSender = new UdpMessageSender(socket, protocolSerializer);
+            var allConnectedClients = new HashSet<Client>();
+            var udpMessageSender = new UdpMessageSender(socket, protocolSerializer, allConnectedClients);
             udpMessageSender.Init();
             RoomDefinitionParser roomDefinitionParser = new RoomDefinitionParser();
-            return new EscapeRoomSocketServer(port, pathToRoomDefinition, roomDefinitionParser, logger, cancellationTokenSource, protocolSerializer, udpMessageSender, timeoutsUntilStop);
+            return new EscapeRoomSocketServer(port, pathToRoomDefinition, roomDefinitionParser, logger, cancellationTokenSource, protocolSerializer, udpMessageSender, timeoutsUntilStop, allConnectedClients);
 
         }
     }

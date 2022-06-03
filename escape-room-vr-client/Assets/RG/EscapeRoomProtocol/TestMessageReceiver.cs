@@ -18,5 +18,20 @@ namespace RG.EscapeRoomProtocol
         {
             messages.Add(message);
         }
+
+        public void Receive(RequestGrabMessage message)
+        {
+            messages.Add(message);
+        }
+
+        public void Receive(GrabResultMessage message)
+        {
+            messages.Add(message);
+        }
+
+        public void Receive(ClientWelcomeMessage message)
+        {
+            
+        }
     }
 }

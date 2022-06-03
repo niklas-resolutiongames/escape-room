@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.IO.Pipes;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading.Tasks;
 using RG.EscapeRoom.Wiring;
 using RG.EscapeRoomProtocol;
 using RG.EscapeRoomProtocol.Messages;
@@ -59,21 +56,26 @@ namespace RG.EscapeRoom.Networking
             serverEndPoint = new IPEndPoint(IPAddress.Parse(serverIp), serverPort);
             clientEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), serverPort+1);
             client = new UdpClient(clientEndPoint);
-            messageSender.SendMessage(client, serverEndPoint, new ClientConnectMessage(Array.Empty<byte>()));
+            messageSender.SocketConnected(client, serverEndPoint);
         }
         
         
     }
 
-    public class MessageSender
+    public class MessageSender:ITickable
     {
         private readonly ProtocolSerializer protocolSerializer;
-
+        private readonly IncomingMessagesData incomingMessagesData;
+        
         ByteFifoBuffer scratchStream;
+        private UdpClient client;
+        private IPEndPoint serverEndPoint;
+        private PlayerMessageBase playerMessageBase = new PlayerMessageBase();
 
-        public MessageSender(ProtocolSerializer protocolSerializer)
+        public MessageSender(ProtocolSerializer protocolSerializer, IncomingMessagesData incomingMessagesData)
         {
             this.protocolSerializer = protocolSerializer;
+            this.incomingMessagesData = incomingMessagesData;
         }
 
         public void Init()
@@ -81,11 +83,31 @@ namespace RG.EscapeRoom.Networking
             scratchStream = new ByteFifoBuffer(1024);
         }
 
-        public Task<int> SendMessage(UdpClient client, IPEndPoint serverEndPoint, ClientConnectMessage message)
+        public void SocketConnected(UdpClient client, IPEndPoint serverEndPoint)
         {
+            this.client = client;
+            this.serverEndPoint = serverEndPoint;
+            var message = new ClientConnectMessage(Array.Empty<byte>());
             var numberOfBytes = protocolSerializer.SerializeMessage(message, scratchStream);
-            var sendMessageTask = client.SendAsync(scratchStream.ReadAllAsArray(), numberOfBytes, serverEndPoint);
-            return sendMessageTask;
+            
+            client.SendAsync(scratchStream.ReadAllAsArray(), numberOfBytes, serverEndPoint);
+        }
+
+        public void SendRequestGrabMessage(byte hand, string grabbableId, bool isGrab)
+        {
+            var message = new RequestGrabMessage(playerMessageBase, hand, grabbableId, isGrab);
+            var numberOfBytes = protocolSerializer.SerializeMessage(message, scratchStream);
+            
+            client.SendAsync(scratchStream.ReadAllAsArray(), numberOfBytes, serverEndPoint);
+        }
+
+        public void Tick()
+        {
+            while (incomingMessagesData.welcomeMessages.Count > 0)
+            {
+                var welcomeMessage = incomingMessagesData.welcomeMessages.Dequeue();
+                playerMessageBase.senderId = welcomeMessage.playerNetworkId;
+            }
         }
     }
     
@@ -102,14 +124,30 @@ namespace RG.EscapeRoom.Networking
         {
         }
 
+        public void Receive(ClientWelcomeMessage message)
+        {
+            incomingMessagesData.welcomeMessages.Enqueue(message);
+        }
         public void Receive(LoadRoomMessage message)
         {
             incomingMessagesData.loadRoomMessages.Enqueue(message);
         }
+
+        public void Receive(RequestGrabMessage message)
+        {
+        }
+
+        public void Receive(GrabResultMessage message)
+        {
+            incomingMessagesData.incomingGrabResults.Enqueue(message);
+        }
+
     }
 
     public class IncomingMessagesData
     {
         public Queue<LoadRoomMessage> loadRoomMessages = new Queue<LoadRoomMessage>();
+        public Queue<GrabResultMessage> incomingGrabResults = new Queue<GrabResultMessage>();
+        public Queue<ClientWelcomeMessage> welcomeMessages = new Queue<ClientWelcomeMessage>();
     }
 }

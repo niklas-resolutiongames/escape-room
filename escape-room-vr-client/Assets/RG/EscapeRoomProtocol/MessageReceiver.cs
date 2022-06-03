@@ -6,5 +6,8 @@ namespace RG.EscapeRoomProtocol
     {
         void Receive(ClientConnectMessage message);
         void Receive(LoadRoomMessage message);
+        void Receive(RequestGrabMessage message);
+        void Receive(GrabResultMessage message);
+        void Receive(ClientWelcomeMessage message);
     }
 }
