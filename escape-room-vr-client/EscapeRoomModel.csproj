@@ -655,10 +655,6 @@
  </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="EscapeRoomProtocol.csproj">
-      <Project>{f6944fa1-2e6b-8e75-9b6f-5796e80acc79}</Project>
-      <Name>EscapeRoomProtocol</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

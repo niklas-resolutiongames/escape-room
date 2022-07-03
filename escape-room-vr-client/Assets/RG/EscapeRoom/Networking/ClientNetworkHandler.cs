@@ -8,7 +8,7 @@ using RG.EscapeRoomProtocol.Messages;
 
 namespace RG.EscapeRoom.Networking
 {
-    public class ClientNetworkHandler:ITickable
+    public class ClientNetworkHandler:ITickable, IDisposable
     {
         
         private readonly MessageSender messageSender;
@@ -19,7 +19,6 @@ namespace RG.EscapeRoom.Networking
         private IPEndPoint clientEndPoint;
         private UdpClient client;
         private ByteFifoBuffer byteFifoBuffer = new ByteFifoBuffer(1024);
-
 
         public ClientNetworkHandler(MessageSender messageSender, ProtocolSerializer protocolSerializer, MessageReceiver messageReceiver)
         {
@@ -58,96 +57,11 @@ namespace RG.EscapeRoom.Networking
             client = new UdpClient(clientEndPoint);
             messageSender.SocketConnected(client, serverEndPoint);
         }
-        
-        
-    }
 
-    public class MessageSender:ITickable
-    {
-        private readonly ProtocolSerializer protocolSerializer;
-        private readonly IncomingMessagesData incomingMessagesData;
-        
-        ByteFifoBuffer scratchStream;
-        private UdpClient client;
-        private IPEndPoint serverEndPoint;
-        private PlayerMessageBase playerMessageBase = new PlayerMessageBase();
 
-        public MessageSender(ProtocolSerializer protocolSerializer, IncomingMessagesData incomingMessagesData)
+        public void Dispose()
         {
-            this.protocolSerializer = protocolSerializer;
-            this.incomingMessagesData = incomingMessagesData;
+            client.Dispose();
         }
-
-        public void Init()
-        {
-            scratchStream = new ByteFifoBuffer(1024);
-        }
-
-        public void SocketConnected(UdpClient client, IPEndPoint serverEndPoint)
-        {
-            this.client = client;
-            this.serverEndPoint = serverEndPoint;
-            var message = new ClientConnectMessage(Array.Empty<byte>());
-            var numberOfBytes = protocolSerializer.SerializeMessage(message, scratchStream);
-            
-            client.SendAsync(scratchStream.ReadAllAsArray(), numberOfBytes, serverEndPoint);
-        }
-
-        public void SendRequestGrabMessage(byte hand, string grabbableId, bool isGrab)
-        {
-            var message = new RequestGrabMessage(playerMessageBase, hand, grabbableId, isGrab);
-            var numberOfBytes = protocolSerializer.SerializeMessage(message, scratchStream);
-            
-            client.SendAsync(scratchStream.ReadAllAsArray(), numberOfBytes, serverEndPoint);
-        }
-
-        public void Tick()
-        {
-            while (incomingMessagesData.welcomeMessages.Count > 0)
-            {
-                var welcomeMessage = incomingMessagesData.welcomeMessages.Dequeue();
-                playerMessageBase.senderId = welcomeMessage.playerNetworkId;
-            }
-        }
-    }
-    
-    public class ClientMessageReceiver: MessageReceiver
-    {
-        private readonly IncomingMessagesData incomingMessagesData;
-
-        public ClientMessageReceiver(IncomingMessagesData incomingMessagesData)
-        {
-            this.incomingMessagesData = incomingMessagesData;
-        }
-
-        public void Receive(ClientConnectMessage message)
-        {
-        }
-
-        public void Receive(ClientWelcomeMessage message)
-        {
-            incomingMessagesData.welcomeMessages.Enqueue(message);
-        }
-        public void Receive(LoadRoomMessage message)
-        {
-            incomingMessagesData.loadRoomMessages.Enqueue(message);
-        }
-
-        public void Receive(RequestGrabMessage message)
-        {
-        }
-
-        public void Receive(GrabResultMessage message)
-        {
-            incomingMessagesData.incomingGrabResults.Enqueue(message);
-        }
-
-    }
-
-    public class IncomingMessagesData
-    {
-        public Queue<LoadRoomMessage> loadRoomMessages = new Queue<LoadRoomMessage>();
-        public Queue<GrabResultMessage> incomingGrabResults = new Queue<GrabResultMessage>();
-        public Queue<ClientWelcomeMessage> welcomeMessages = new Queue<ClientWelcomeMessage>();
     }
 }

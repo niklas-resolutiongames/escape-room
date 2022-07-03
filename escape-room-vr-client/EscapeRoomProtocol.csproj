@@ -52,6 +52,7 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
+     <Compile Include="Assets\RG\EscapeRoomProtocol\Messages\GrabResultMessage.cs" />
      <Compile Include="Assets\RG\EscapeRoomProtocol\ProtocolSerializer.cs" />
      <Compile Include="Assets\RG\EscapeRoomProtocol\Messages\ClientWelcomeMessage.cs" />
      <Compile Include="Assets\RG\EscapeRoomProtocol\ByteFifoBuffer.cs" />
@@ -59,9 +60,11 @@
      <Compile Include="Assets\RG\EscapeRoomProtocol\Messages\ClientConnectMessage.cs" />
      <Compile Include="Assets\RG\EscapeRoomProtocol\Messages\PlayerMessageBase.cs" />
      <Compile Include="Assets\RG\EscapeRoomProtocol\MessageReceiver.cs" />
+     <Compile Include="Assets\RG\EscapeRoomProtocol\Messages\PlayerPositionMessage.cs" />
      <Compile Include="Assets\RG\EscapeRoomProtocol\TestMessageReceiver.cs" />
      <Compile Include="Assets\RG\EscapeRoomProtocol\Messages\LoadRoomMessage.cs" />
      <Compile Include="Assets\RG\EscapeRoomProtocol\ByteUtil.cs" />
+     <Compile Include="Assets\RG\EscapeRoomProtocol\Messages\MessageIds.cs" />
      <None Include="Assets\RG\EscapeRoomProtocol\EscapeRoomProtocol.asmdef" />
  <Reference Include="UnityEngine">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2020.3.24f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
@@ -659,6 +662,10 @@
  </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="EscapeRoomModel.csproj">
+      <Project>{acf40201-1b74-fa3b-3375-d2fb919b8e61}</Project>
+      <Name>EscapeRoomModel</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

@@ -9,13 +9,15 @@ namespace RG.EscapeRoomServer.Server
         private readonly Client client;
         private readonly MessageSender messageSender;
         private readonly RoomDefinition roomDefinition;
+        private readonly ILogger logger;
         private int nextPlayerNetworkId;
 
-        public ServerMessageReceiver(Client client, MessageSender messageSender, RoomDefinition roomDefinition)
+        public ServerMessageReceiver(Client client, MessageSender messageSender, RoomDefinition roomDefinition, ILogger logger)
         {
             this.client = client;
             this.messageSender = messageSender;
             this.roomDefinition = roomDefinition;
+            this.logger = logger;
         }
 
         public void Receive(ClientConnectMessage message)
@@ -41,6 +43,16 @@ namespace RG.EscapeRoomServer.Server
         public void Receive(ClientWelcomeMessage message)
         {
             
+        }
+
+        public void Receive(PlayerPositionMessage message)
+        {
+            messageSender.Broadcast(message);
+        }
+
+        public void MessageDiscarded(ushort messageType)
+        {
+            logger.Error($"Discarded message of type {messageType}", null);   
         }
     }
 }

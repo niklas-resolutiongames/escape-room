@@ -6,6 +6,7 @@ namespace RG.Tests
     public class ServerTestUtils
     {
         private static CancellationTokenSource stopServerCancellationTokenSource = new CancellationTokenSource();
+        private static EscapeRoomSocketServer escapeRoomSocketServer;
 
         public static EscapeRoomSocketServer StartServer(int port, int timeoutsUntilStop)
         {
@@ -13,7 +14,7 @@ namespace RG.Tests
             stopServerCancellationTokenSource = new CancellationTokenSource();
             ILogger unityTestLogger = new UnityTestLogger();
             var serverFactory = new ServerFactory(unityTestLogger, stopServerCancellationTokenSource);
-            var escapeRoomSocketServer = serverFactory.CreateServer(port, TestUtil.PathToFile("Assets/RG/EscapeRoomPlayModeTests/SingleLever/SingleLeverFactoryTestRoomDefinition.json"), timeoutsUntilStop);
+            escapeRoomSocketServer = serverFactory.CreateServer(port, TestUtil.PathToFile("Assets/RG/EscapeRoomPlayModeTests/SingleLever/SingleLeverFactoryTestRoomDefinition.json"), timeoutsUntilStop);
             escapeRoomSocketServer.Start();
             return escapeRoomSocketServer;
         }
@@ -21,6 +22,11 @@ namespace RG.Tests
         public static void StopServer()
         {
             stopServerCancellationTokenSource.Cancel();
+        }
+
+        public static bool ServerIsRunning()
+        {
+            return escapeRoomSocketServer != null && escapeRoomSocketServer.IsRunning();
         }
     }
 }

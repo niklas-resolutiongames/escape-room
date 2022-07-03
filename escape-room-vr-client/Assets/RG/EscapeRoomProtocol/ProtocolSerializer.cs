@@ -1,6 +1,8 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using System.Threading.Tasks;
 using RG.EscapeRoomProtocol.Messages;
+using RG.EscapeRoom.Model.Math;
 
 namespace RG.EscapeRoomProtocol
 {
@@ -8,15 +10,22 @@ namespace RG.EscapeRoomProtocol
     {
 
         private ByteFifoBuffer scratchByteFifoBuffer = new ByteFifoBuffer(1024);
+        private byte[] floatScratchBuffer = new byte[4];
+        private readonly PrimitiveSerializer primitiveSerializer;
+
+        public ProtocolSerializer(PrimitiveSerializer primitiveSerializer)
+        {
+            this.primitiveSerializer = primitiveSerializer;
+        }
 
         public int SerializeMessage(ClientConnectMessage message, ByteFifoBuffer byteFifoBuffer)
         {
             int size = 0;
             lock (scratchByteFifoBuffer)
             {
-                size += Write(ClientConnectMessage.ID, scratchByteFifoBuffer);
-                size += Write(message.accessToken, scratchByteFifoBuffer);
-                size += Write((ushort) size, byteFifoBuffer);
+                size += primitiveSerializer.Write(MessageIds.ClientConnectMessage, scratchByteFifoBuffer);
+                size += primitiveSerializer.Write(message.accessToken, scratchByteFifoBuffer);
+                size += primitiveSerializer.Write((ushort) size, byteFifoBuffer);
                 byteFifoBuffer.WriteAll(scratchByteFifoBuffer);
             }
 
@@ -27,9 +36,9 @@ namespace RG.EscapeRoomProtocol
             int size = 0;
             lock (scratchByteFifoBuffer)
             {
-                size += Write(ClientConnectMessage.ID, scratchByteFifoBuffer);
-                size += Write(message.playerNetworkId, scratchByteFifoBuffer);
-                size += Write((ushort) size, byteFifoBuffer);
+                size += primitiveSerializer.Write(MessageIds.ClientConnectMessage, scratchByteFifoBuffer);
+                size += primitiveSerializer.Write(message.playerNetworkId, scratchByteFifoBuffer);
+                size += primitiveSerializer.Write((ushort) size, byteFifoBuffer);
                 byteFifoBuffer.WriteAll(scratchByteFifoBuffer);
             }
 
@@ -41,9 +50,9 @@ namespace RG.EscapeRoomProtocol
             int size = 0;
             lock (scratchByteFifoBuffer)
             {
-                size += Write(LoadRoomMessage.ID, scratchByteFifoBuffer);
-                size += Write(message.roomDefinitionId, scratchByteFifoBuffer);
-                size += Write((ushort) size, byteFifoBuffer);
+                size += primitiveSerializer.Write(MessageIds.LoadRoomMessage, scratchByteFifoBuffer);
+                size += primitiveSerializer.Write(message.roomDefinitionId, scratchByteFifoBuffer);
+                size += primitiveSerializer.Write((ushort) size, byteFifoBuffer);
                 byteFifoBuffer.WriteAll(scratchByteFifoBuffer);
             }
 
@@ -56,9 +65,9 @@ namespace RG.EscapeRoomProtocol
             int size = 0;
             lock (scratchByteFifoBuffer)
             {
-                size += Write(RequestGrabMessage.ID, scratchByteFifoBuffer);
+                size += primitiveSerializer.Write(MessageIds.RequestGrabMessage, scratchByteFifoBuffer);
                 size += SerializeGrabMessageContent(message, scratchByteFifoBuffer);
-                size += Write((ushort) size, byteFifoBuffer);
+                size += primitiveSerializer.Write((ushort) size, byteFifoBuffer);
                 byteFifoBuffer.WriteAll(scratchByteFifoBuffer);
             }
 
@@ -70,10 +79,31 @@ namespace RG.EscapeRoomProtocol
             int size = 0;
             lock (scratchByteFifoBuffer)
             {
-                size += Write(GrabResultMessage.ID, scratchByteFifoBuffer);
+                size += primitiveSerializer.Write(MessageIds.GrabResultMessage, scratchByteFifoBuffer);
                 size += SerializeGrabMessageContent(message.requestMessage, scratchByteFifoBuffer);
-                size += Write(message.wasSuccessful, scratchByteFifoBuffer);
-                size += Write((ushort) size, byteFifoBuffer);
+                size += primitiveSerializer.Write(message.wasSuccessful, scratchByteFifoBuffer);
+                size += primitiveSerializer.Write((ushort) size, byteFifoBuffer);
+                byteFifoBuffer.WriteAll(scratchByteFifoBuffer);
+            }
+
+            return size;
+        }
+
+        public int SerializeMessage(PlayerPositionMessage message, ByteFifoBuffer byteFifoBuffer)
+        {
+            int size = 0;
+            lock (scratchByteFifoBuffer)
+            {
+                size += primitiveSerializer.Write(MessageIds.PlayerPositionMessage, scratchByteFifoBuffer);
+                size += primitiveSerializer.Write(message.playerMessageBase, scratchByteFifoBuffer);
+                size += primitiveSerializer.Write(message.headPosition, scratchByteFifoBuffer);
+                size += primitiveSerializer.Write(message.headRotation, scratchByteFifoBuffer);
+                size += primitiveSerializer.Write(message.leftHandPosition, scratchByteFifoBuffer);
+                size += primitiveSerializer.Write(message.leftHandRotation, scratchByteFifoBuffer);
+                size += primitiveSerializer.Write(message.rightHandPosition, scratchByteFifoBuffer);
+                size += primitiveSerializer.Write(message.rightHandRotation, scratchByteFifoBuffer);
+                
+                size += primitiveSerializer.Write((ushort) size, byteFifoBuffer);
                 byteFifoBuffer.WriteAll(scratchByteFifoBuffer);
             }
 
@@ -82,10 +112,10 @@ namespace RG.EscapeRoomProtocol
 
         private int SerializeGrabMessageContent(RequestGrabMessage message, ByteFifoBuffer byteFifoBuffer)
         {
-            var size = Write(message.playerMessageBase, scratchByteFifoBuffer);
-            size += Write(message.hand, scratchByteFifoBuffer);
-            size += Write(message.grabbableId, scratchByteFifoBuffer);
-            size += Write(message.isGrab, scratchByteFifoBuffer);
+            var size = primitiveSerializer.Write(message.playerMessageBase, scratchByteFifoBuffer);
+            size += primitiveSerializer.Write(message.hand, scratchByteFifoBuffer);
+            size += primitiveSerializer.Write(message.grabbableId, scratchByteFifoBuffer);
+            size += primitiveSerializer.Write(message.isGrab, scratchByteFifoBuffer);
             return size;
         }
 
@@ -95,22 +125,58 @@ namespace RG.EscapeRoomProtocol
             ushort nextMessageType = await ReadShort(byteFifoBuffer);
             switch (nextMessageType) 
             {
-                case ClientConnectMessage.ID:
+                case MessageIds.ClientConnectMessage:
                     await DeserializeHelloMessage(byteFifoBuffer, receiver);
                     break;
-                case ClientWelcomeMessage.ID:
+                case MessageIds.ClientWelcomeMessage:
                     await DeserializeClientWelcomeMessage(byteFifoBuffer, receiver);
                     break;
-                case LoadRoomMessage.ID: 
+                case MessageIds.LoadRoomMessage: 
                     await DeserializeLoadRoomMessage(byteFifoBuffer, receiver);
                     break;
-                case RequestGrabMessage.ID: 
+                case MessageIds.RequestGrabMessage: 
                     await DeserializeRequestGrabMessage(byteFifoBuffer, receiver);
                     break;
-                case GrabResultMessage.ID: 
+                case MessageIds.GrabResultMessage: 
                     await DeserializeGrabResultMessage(byteFifoBuffer, receiver);
                     break;
+                case MessageIds.PlayerPositionMessage: 
+                    await DeserializePlayerPositionMessage(byteFifoBuffer, receiver);
+                    break;
+                default:
+                    await DiscardMessage(byteFifoBuffer, nextMessageType, nextMessageLength, receiver
+                    );
+                    break;
             }
+        }
+
+        private async Task DeserializePlayerPositionMessage(ByteFifoBuffer byteFifoBuffer, MessageReceiver receiver)
+        {
+                
+            PlayerMessageBase playerMessageBase = await ReadMessageBase(byteFifoBuffer);
+            Vector3 headPosition = await ReadVector3(byteFifoBuffer);
+            Quaternion headRotation = await ReadQuaternion(byteFifoBuffer);
+            Vector3 leftHandPosition = await ReadVector3(byteFifoBuffer);
+            Quaternion leftHandRotation = await ReadQuaternion(byteFifoBuffer);
+            Vector3 rightHandPosition = await ReadVector3(byteFifoBuffer);
+            Quaternion rightHandRotation = await ReadQuaternion(byteFifoBuffer);
+            var message = new PlayerPositionMessage(playerMessageBase,
+                headPosition, headRotation,
+                leftHandPosition, leftHandRotation,
+                rightHandPosition, rightHandRotation);
+            
+            receiver.Receive(message);
+        }
+
+        private async Task DiscardMessage(ByteFifoBuffer byteFifoBuffer, ushort nextMessageType,
+            ushort totalMessageLength,
+            MessageReceiver messageReceiver)
+        {
+            var length = totalMessageLength - 2;
+            await UntilByteFifoBufferContains(byteFifoBuffer, length);
+            var array = new byte[length];
+            byteFifoBuffer.Read(array,0,  length);
+            messageReceiver.MessageDiscarded(nextMessageType);
         }
 
         private async Task DeserializeGrabResultMessage(ByteFifoBuffer byteFifoBuffer, MessageReceiver receiver)
@@ -215,6 +281,33 @@ namespace RG.EscapeRoomProtocol
             return r;
         }
 
+
+        private async Task<Vector3> ReadVector3(ByteFifoBuffer byteFifoBuffer)
+        {
+            await UntilByteFifoBufferContains(byteFifoBuffer, 12);
+            var x = ReadFloat(byteFifoBuffer);
+            var y = ReadFloat(byteFifoBuffer);
+            var z = ReadFloat(byteFifoBuffer);
+            return new Vector3(x, y, z);
+        }
+
+        private float ReadFloat(ByteFifoBuffer byteFifoBuffer)
+        {
+            byteFifoBuffer.Read(floatScratchBuffer, 0, 4);
+            return BitConverter.ToSingle(floatScratchBuffer, 0);
+        }
+
+        private async Task<Quaternion> ReadQuaternion(ByteFifoBuffer byteFifoBuffer)
+        {
+            
+            await UntilByteFifoBufferContains(byteFifoBuffer, 16);
+            var x = ReadFloat(byteFifoBuffer);
+            var y = ReadFloat(byteFifoBuffer);
+            var z = ReadFloat(byteFifoBuffer);
+            var w = ReadFloat(byteFifoBuffer);
+            return new Quaternion(x, y, z, w);
+        }
+
         private async Task UntilByteFifoBufferContains(ByteFifoBuffer byteFifoBuffer, int leastNumberOfExpectedBytes)
         {
             while (byteFifoBuffer.Length < leastNumberOfExpectedBytes)
@@ -223,13 +316,19 @@ namespace RG.EscapeRoomProtocol
             }
         }
 
-        private int Write(PlayerMessageBase playerMessageBase, ByteFifoBuffer byteFifoBuffer)
+
+    }
+
+    public class PrimitiveSerializer
+    {
+        
+        public int Write(PlayerMessageBase playerMessageBase, ByteFifoBuffer byteFifoBuffer)
         {
             int size = Write(playerMessageBase.senderId, byteFifoBuffer);
             return size;
         }
         
-        private int Write(int i, ByteFifoBuffer byteFifoBuffer)
+        public int Write(int i, ByteFifoBuffer byteFifoBuffer)
         {
             byteFifoBuffer.WriteByte( (byte) ((i>>24) & 0xff));
             byteFifoBuffer.WriteByte( (byte) ((i>>16) & 0xff));
@@ -238,20 +337,20 @@ namespace RG.EscapeRoomProtocol
             return 4;
         }
         
-        private int Write(bool b, ByteFifoBuffer byteFifoBuffer)
+        public int Write(bool b, ByteFifoBuffer byteFifoBuffer)
         {
             byte byteValue = (byte) (b?1:0);
             byteFifoBuffer.WriteByte(byteValue);
             return 1;
         }
         
-        private int Write(byte b, ByteFifoBuffer byteFifoBuffer)
+        public int Write(byte b, ByteFifoBuffer byteFifoBuffer)
         {
             byteFifoBuffer.WriteByte(b);
             return 1;
         }
         
-        private int Write(ushort s, ByteFifoBuffer byteFifoBuffer)
+        public int Write(ushort s, ByteFifoBuffer byteFifoBuffer)
         {
             var hiByte = (byte) ((s>>8) & 0xff);
             var loByte = (byte) (s & 0xff);
@@ -259,7 +358,7 @@ namespace RG.EscapeRoomProtocol
             byteFifoBuffer.WriteByte(loByte);
             return 2;
         }
-        private int Write(byte[] array, ByteFifoBuffer byteFifoBuffer)
+        public int Write(byte[] array, ByteFifoBuffer byteFifoBuffer)
         {
             var arrayLength = array.Length;
             var size = arrayLength;
@@ -267,10 +366,36 @@ namespace RG.EscapeRoomProtocol
             byteFifoBuffer.Write(array,0,arrayLength);
             return size;
         }
-        private int Write(string s, ByteFifoBuffer byteFifoBuffer)
+
+        public int Write(Vector3 v, ByteFifoBuffer byteFifoBuffer)
+        {
+            var size = 0;
+            size += Write(v.x, byteFifoBuffer);
+            size += Write(v.y, byteFifoBuffer);
+            size += Write(v.z, byteFifoBuffer);
+            return size;
+        }
+
+        public int Write(Quaternion q, ByteFifoBuffer byteFifoBuffer)
+        {
+            var size = 0;
+            size += Write(q.x, byteFifoBuffer);
+            size += Write(q.y, byteFifoBuffer);
+            size += Write(q.z, byteFifoBuffer);
+            size += Write(q.w, byteFifoBuffer);
+            return size;
+        }
+
+        public int Write(float f, ByteFifoBuffer byteFifoBuffer)
+        {
+            
+            byteFifoBuffer.Write(BitConverter.GetBytes(f),0,4);
+            return 4;
+        }
+
+        public int Write(string s, ByteFifoBuffer byteFifoBuffer)
         {
             return Write(Encoding.UTF8.GetBytes(s), byteFifoBuffer);
         }
-
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using RG.EscapeRoomProtocol.Messages;
 
 namespace RG.EscapeRoomProtocol
@@ -31,7 +32,17 @@ namespace RG.EscapeRoomProtocol
 
         public void Receive(ClientWelcomeMessage message)
         {
-            
+            messages.Add(message);   
+        }
+
+        public void Receive(PlayerPositionMessage message)
+        {
+            messages.Add(message);
+        }
+
+        public void MessageDiscarded(ushort messageType)
+        {
+            throw new Exception($"No messages should be discarded, but one of id {messageType} was");
         }
     }
 }

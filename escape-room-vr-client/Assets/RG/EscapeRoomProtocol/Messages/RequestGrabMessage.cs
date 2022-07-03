@@ -4,7 +4,6 @@
     {
         public const byte RightHand = 0;
         public const byte LeftHand = 1;
-        public const ushort ID = 2;
         public PlayerMessageBase playerMessageBase;
         public byte hand;
         public string grabbableId;
@@ -16,18 +15,6 @@
             this.hand = hand;
             this.grabbableId = grabbableId;
             this.isGrab = isGrab;
-        }
-    }
-    public struct GrabResultMessage
-    {
-        public const ushort ID = 3;
-        public RequestGrabMessage requestMessage;
-        public bool wasSuccessful;
-
-        public GrabResultMessage(RequestGrabMessage requestMessage, bool wasSuccessful)
-        {
-            this.requestMessage = requestMessage;
-            this.wasSuccessful = wasSuccessful;
         }
     }
 }

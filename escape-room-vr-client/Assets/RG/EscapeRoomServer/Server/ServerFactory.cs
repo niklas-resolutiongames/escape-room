@@ -19,7 +19,7 @@ namespace RG.EscapeRoomServer.Server
 
         public EscapeRoomSocketServer CreateServer(int port, string pathToRoomDefinition, int timeoutsUntilStop = 0)
         {
-            var protocolSerializer = new ProtocolSerializer();
+            var protocolSerializer = new ProtocolSerializer(new PrimitiveSerializer());
             Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             var allConnectedClients = new HashSet<Client>();
             var udpMessageSender = new UdpMessageSender(socket, protocolSerializer, allConnectedClients);

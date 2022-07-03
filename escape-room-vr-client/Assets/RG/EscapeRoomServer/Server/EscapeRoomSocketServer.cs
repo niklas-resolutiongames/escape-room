@@ -74,7 +74,6 @@ public class EscapeRoomSocketServer
             socket.Bind(ipEndPoint);
             while (!cancellationTokenSource.IsCancellationRequested)
             {
-                logger.Info($"[Server] Waiting for data...");
                 int numberOfReceivedBytes = 0;
                 try
                 {
@@ -107,14 +106,13 @@ public class EscapeRoomSocketServer
                     else
                     {
                         client = new Client(remote);
-                        var clientMessageReceiver = new ServerMessageReceiver(client, messageSender, roomDefintion);
+                        var clientMessageReceiver = new ServerMessageReceiver(client, messageSender, roomDefintion, logger);
                         client.Init();
                         clients[socketAddress] = client;
                         receivers[client] = clientMessageReceiver;
                         allConnectedClients.Add(client);
                         remote = CreateEndPoint();
                     }
-                    logger.Info($"Client {socketAddress} sent {numberOfReceivedBytes} bytes: {ByteUtil.ByteArrayToString(data, 0, numberOfReceivedBytes)}");
 
                     client.ReceiveData(data,numberOfReceivedBytes);
                     clientsToProcess.Enqueue(client);
@@ -128,7 +126,7 @@ public class EscapeRoomSocketServer
             logger.Error("Error", e);
         } finally
         {
-            socket.Close();  
+            socket.Close();
         }
 
         isRunning = false;

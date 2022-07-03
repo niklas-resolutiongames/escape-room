@@ -33,6 +33,20 @@ namespace RG.EscapeRoomServer.Server
             }
         }
 
+        public void Broadcast(PlayerPositionMessage message)
+        {
+            lock (byteBuffer)
+            {
+                int numberOfBytes = protocolSerializer.SerializeMessage(message, byteBuffer);
+                var data = byteBuffer.ReadAllAsArray();
+                foreach (var client in allConnectedClients)
+                {
+                    socket.SendTo(data, numberOfBytes, SocketFlags.None, client.endPoint);
+                }
+            }
+
+        }
+
         public void SendMessage(Client client, ClientWelcomeMessage message)
         {
             lock (byteBuffer)
@@ -59,6 +73,7 @@ namespace RG.EscapeRoomServer.Server
     {
         void SendMessage(Client client, LoadRoomMessage loadRoomMessage);
         void Broadcast(GrabResultMessage grabResultMessage);
+        void Broadcast(PlayerPositionMessage message);
         void SendMessage(Client client, ClientWelcomeMessage message);
     }
 }

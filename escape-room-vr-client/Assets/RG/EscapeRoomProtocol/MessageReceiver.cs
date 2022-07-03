@@ -9,5 +9,7 @@ namespace RG.EscapeRoomProtocol
         void Receive(RequestGrabMessage message);
         void Receive(GrabResultMessage message);
         void Receive(ClientWelcomeMessage message);
+        void Receive(PlayerPositionMessage message);
+        void MessageDiscarded(ushort nextMessageType);
     }
 }

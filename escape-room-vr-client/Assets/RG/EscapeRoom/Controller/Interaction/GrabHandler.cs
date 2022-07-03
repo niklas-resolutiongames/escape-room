@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using RG.EscapeRoom.Controller.Player;
 using RG.EscapeRoom.Interaction;
 using RG.EscapeRoom.Interaction.Scripts;
@@ -7,7 +6,6 @@ using RG.EscapeRoom.Networking;
 using RG.EscapeRoom.Wiring;
 using RG.EscapeRoom.Wiring.Factories;
 using RG.EscapeRoomProtocol.Messages;
-using UnityEngine;
 
 namespace RG.EscapeRoom.Controller.Interaction
 {
@@ -100,8 +98,6 @@ namespace RG.EscapeRoom.Controller.Interaction
                     if (handReference.interactableItemsInContactWithHand.Count > 0)
                     {
                         var grabbedItem = handReference.interactableItemsInContactWithHand.First();
-                        if (grabbedItem != null)
-                            Debug.Log($"{controller} tried to grab {grabbedItem}");
                         timeForLastGrabAttempt = timeProvider.GetTime();
                         messageSender.SendRequestGrabMessage(hand, grabbedItem.NetworkId(), true);
                     }
@@ -111,7 +107,6 @@ namespace RG.EscapeRoom.Controller.Interaction
             {
                 if (itemHeldInHand != null && MessageSendingCurfewPassed(timeForLastGrabAttempt))
                 {
-                    Debug.Log($"{controller} released {itemHeldInHand}");
                     timeForLastGrabAttempt = timeProvider.GetTime();
                     messageSender.SendRequestGrabMessage(hand, itemHeldInHand.NetworkId(), false);
                 }

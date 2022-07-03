@@ -1,6 +1,3 @@
 {
-  "name": "EscapeRoomModel",
-  "references": [
-    "EscapeRoomProtocol"
-  ]
+  "name": "EscapeRoomModel"
 }
