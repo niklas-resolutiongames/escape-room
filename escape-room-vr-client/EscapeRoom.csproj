@@ -58,6 +58,7 @@
      <Compile Include="Assets\RG\EscapeRoom\View\Puzzles\SingleLever\SingleLeverReference.cs" />
      <Compile Include="Assets\RG\EscapeRoom\Controller\Interaction\HandPullHandler.cs" />
      <Compile Include="Assets\RG\EscapeRoom\Wiring\InteractionHandlers.cs" />
+     <Compile Include="Assets\RG\EscapeRoom\Controller\Player\NetworkedPlayerReference.cs" />
      <Compile Include="Assets\RG\EscapeRoom\View\Puzzles\SingleLever\SingleLeverSettings.cs" />
      <Compile Include="Assets\RG\EscapeRoom\Networking\ClientMessageReceiver.cs" />
      <Compile Include="Assets\RG\EscapeRoom\Controller\Player\XRPlayerHandReference.cs" />
@@ -67,6 +68,7 @@
      <Compile Include="Assets\RG\EscapeRoom\View\Puzzles\SingleLever\SingleLeverFactory.cs" />
      <Compile Include="Assets\RG\EscapeRoom\Wiring\Factories\XRPlayerFactory.cs" />
      <Compile Include="Assets\RG\EscapeRoom\Controller\Interaction\ControllerButtonListener.cs" />
+     <Compile Include="Assets\RG\EscapeRoom\ViewController\Player\NetworkedPlayerViewController.cs" />
      <Compile Include="Assets\RG\EscapeRoom\Networking\ClientPositionHandler.cs" />
      <Compile Include="Assets\RG\EscapeRoom\ViewController\IViewController.cs" />
      <Compile Include="Assets\RG\EscapeRoom\Controller\Player\HandInteractableItemReference.cs" />
@@ -74,10 +76,11 @@
      <Compile Include="Assets\RG\EscapeRoom\ViewController\Puzzles\SingleLever\SingleLeverViewController.cs" />
      <Compile Include="Assets\RG\EscapeRoom\Controller\Player\XRPlayerSettings.cs" />
      <Compile Include="Assets\RG\EscapeRoom\Networking\MessageSender.cs" />
-     <Compile Include="Assets\RG\EscapeRoom\Networking\ClientNetworkHandler.cs" />
+     <Compile Include="Assets\RG\EscapeRoom\Networking\ClientNetworkConnectionHandler.cs" />
      <Compile Include="Assets\RG\EscapeRoom\Controller\IController.cs" />
      <Compile Include="Assets\RG\EscapeRoom\Wiring\GameClientFactory.cs" />
      <Compile Include="Assets\RG\EscapeRoom\Controller\Player\XRPlayerReference.cs" />
+     <Compile Include="Assets\RG\EscapeRoom\Wiring\Factories\NetworkedPlayerFactory.cs" />
      <Compile Include="Assets\RG\EscapeRoom\Controller\Puzzles\SingleLever\SingleLeverController.cs" />
      <None Include="Assets\RG\EscapeRoom\EscapeRoom.asmdef" />
  <Reference Include="UnityEngine">

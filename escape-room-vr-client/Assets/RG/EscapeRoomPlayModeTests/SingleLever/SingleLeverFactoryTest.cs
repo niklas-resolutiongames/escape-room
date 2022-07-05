@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using RG.EscapeRoom.Controller.Player;
 using RG.EscapeRoom.Interaction.Scripts;
 using RG.EscapeRoom.Model.Puzzles.SingleLever;
 using RG.EscapeRoom.Puzzles.SingleLever;
@@ -120,5 +121,11 @@ public class SingleLeverFactoryTest
         Assert.AreEqual(MathUtils.InternalVector3(localPlayerRightHandTransform.position), localPlayerNetworkState.rightHandPosition);
         Assert.AreEqual(MathUtils.InternalQuaternion(localPlayerLeftHandTransform.rotation), localPlayerNetworkState.leftHandRotation);
         Assert.AreEqual(MathUtils.InternalQuaternion(localPlayerRightHandTransform.rotation), localPlayerNetworkState.rightHandRotation);
+
+        var localPlayerNetworkedPlayerGameObject = GameObject.Find($"NetworkedPlayerReference_{localGameClient.receivedNetworkStateData.localPlayerNetworkId}").GetComponent<NetworkedPlayerReference>();
+        Assert.IsNotNull(localPlayerNetworkedPlayerGameObject);
+        Assert.AreEqual(localPlayerHeadTransform, localPlayerNetworkedPlayerGameObject.head.transform);
+        Assert.AreEqual(localPlayerLeftHandTransform, localPlayerNetworkedPlayerGameObject.leftHand.transform);
+        Assert.AreEqual(localPlayerRightHandTransform, localPlayerNetworkedPlayerGameObject.rightHand.transform);
     }
 }

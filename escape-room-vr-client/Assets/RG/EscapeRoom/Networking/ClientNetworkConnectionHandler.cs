@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using RG.EscapeRoom.Wiring;
 using RG.EscapeRoomProtocol;
-using RG.EscapeRoomProtocol.Messages;
 
 namespace RG.EscapeRoom.Networking
 {
-    public class ClientNetworkHandler:ITickable, IDisposable
+    public class ClientNetworkConnectionHandler:ITickable, IDisposable
     {
         
         private readonly MessageSender messageSender;
@@ -20,7 +18,7 @@ namespace RG.EscapeRoom.Networking
         private UdpClient client;
         private ByteFifoBuffer byteFifoBuffer = new ByteFifoBuffer(1024);
 
-        public ClientNetworkHandler(MessageSender messageSender, ProtocolSerializer protocolSerializer, MessageReceiver messageReceiver)
+        public ClientNetworkConnectionHandler(MessageSender messageSender, ProtocolSerializer protocolSerializer, MessageReceiver messageReceiver)
         {
             this.messageSender = messageSender;
             this.protocolSerializer = protocolSerializer;
