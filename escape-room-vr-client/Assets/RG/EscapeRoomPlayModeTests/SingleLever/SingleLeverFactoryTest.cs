@@ -6,6 +6,7 @@ using RG.EscapeRoom.Interaction.Scripts;
 using RG.EscapeRoom.Model.Puzzles.SingleLever;
 using RG.EscapeRoom.Puzzles.SingleLever;
 using RG.EscapeRoom.Wiring;
+using RG.EscapeRoomServer.Server;
 using RG.Tests;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -16,17 +17,22 @@ public class SingleLeverFactoryTest
     private GameClient localGameClient;
     private EscapeRoomSocketServer escapeRoomSocketServer;
     private int serverPort = 12345;
+    private bool useInternalServer = true;
 
     [UnitySetUp]
     public IEnumerator SetUp()
     {
         testMotionHelper = new TestMotionHelper();
-        escapeRoomSocketServer = ServerTestUtils.StartServer(serverPort, 30);
+        if (useInternalServer)
+        {
+            escapeRoomSocketServer = ServerTestUtils.StartServer(serverPort, 30);
+        }
+
         var gameClientFactory = new GameClientFactory();
         GameClientFactory.TESTING_ROOM_JSON = TestUtil.ReadTextFile(
             "Assets/RG/EscapeRoomPlayModeTests/SingleLever/SingleLeverFactoryTestRoomDefinition.json");
         localGameClient = gameClientFactory.CreateGameClient();
-        localGameClient.Connect(serverPort, "127.0.0.1");
+        localGameClient.Connect(12345, "127.0.0.1");
         testMotionHelper.TickInBackground(localGameClient);
 
         yield return testMotionHelper.Await(Task.Run(async () =>
@@ -43,11 +49,15 @@ public class SingleLeverFactoryTest
     [UnityTearDown]
     public IEnumerator StopServer()
     {
-        ServerTestUtils.StopServer();
         localGameClient.Dispose();
-        while (ServerTestUtils.ServerIsRunning())
+        yield return null;
+        if (useInternalServer)
         {
-            yield return null;
+            ServerTestUtils.StopServer();
+            while (ServerTestUtils.ServerIsRunning())
+            {
+                yield return null;
+            }
         }
     }
 

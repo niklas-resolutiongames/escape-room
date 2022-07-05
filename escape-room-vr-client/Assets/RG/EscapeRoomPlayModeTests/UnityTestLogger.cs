@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using ILogger = RG.EscapeRoomServer.Server.ILogger;
 
 public class UnityTestLogger : ILogger
 {

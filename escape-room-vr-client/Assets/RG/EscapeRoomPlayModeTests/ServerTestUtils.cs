@@ -1,4 +1,5 @@
 ﻿using System.Threading;
+using RG.EscapeRoom.Wiring.Factories;
 using RG.EscapeRoomServer.Server;
 
 namespace RG.Tests
@@ -13,7 +14,7 @@ namespace RG.Tests
             stopServerCancellationTokenSource.Cancel();
             stopServerCancellationTokenSource = new CancellationTokenSource();
             ILogger unityTestLogger = new UnityTestLogger();
-            var serverFactory = new ServerFactory(unityTestLogger, stopServerCancellationTokenSource);
+            var serverFactory = new ServerFactory(unityTestLogger, stopServerCancellationTokenSource, new RoomDefinitionParser());
             escapeRoomSocketServer = serverFactory.CreateServer(port, TestUtil.PathToFile("Assets/RG/EscapeRoomPlayModeTests/SingleLever/SingleLeverFactoryTestRoomDefinition.json"), timeoutsUntilStop);
             escapeRoomSocketServer.Start();
             return escapeRoomSocketServer;

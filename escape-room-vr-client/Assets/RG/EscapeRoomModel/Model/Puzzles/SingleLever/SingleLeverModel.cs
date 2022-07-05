@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace RG.EscapeRoom.Model.Puzzles.SingleLever
+﻿namespace RG.EscapeRoom.Model.Puzzles.SingleLever
 {
     public class SingleLeverModel: IIntegerOutputPuzzleModel
     {

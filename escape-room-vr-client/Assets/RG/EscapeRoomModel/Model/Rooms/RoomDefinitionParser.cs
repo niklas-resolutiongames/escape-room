@@ -1,21 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using RG.EscapeRoom.Model.Puzzles;
+using RG.EscapeRoom.Model.Rooms;
 using UnityEngine;
 
 namespace RG.EscapeRoom.Model.Rooms
 {
-    public class RoomDefinitionParser
+    public interface IRoomDefinitionParser
     {
-        public RoomDefinition Parse(string json)
-        {
-            return JsonUtility.FromJson<RoomDefinition>(json);
-        }
-
-        public string ToJson(RoomDefinition roomDefinition)
-        {
-            return JsonUtility.ToJson(roomDefinition);
-        }
+        RoomDefinition Parse(string json);
+        string ToJson(RoomDefinition roomDefinition);
     }
 
     [Serializable]

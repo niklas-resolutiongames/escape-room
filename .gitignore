@@ -5,3 +5,5 @@ Temp
 Logs
 obj
 **/InitTestScene*.unity*
+server/EscapeRoomServerRuntime/libs
+server/EscapeRoomServerRuntime/bin

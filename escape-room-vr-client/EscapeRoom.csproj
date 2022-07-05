@@ -73,6 +73,7 @@
      <Compile Include="Assets\RG\EscapeRoom\ViewController\IViewController.cs" />
      <Compile Include="Assets\RG\EscapeRoom\Controller\Player\HandInteractableItemReference.cs" />
      <Compile Include="Assets\RG\EscapeRoom\Wiring\TimeProvider.cs" />
+     <Compile Include="Assets\RG\EscapeRoom\Wiring\Factories\UnityRoomDefinitionParser.cs" />
      <Compile Include="Assets\RG\EscapeRoom\ViewController\Puzzles\SingleLever\SingleLeverViewController.cs" />
      <Compile Include="Assets\RG\EscapeRoom\Controller\Player\XRPlayerSettings.cs" />
      <Compile Include="Assets\RG\EscapeRoom\Networking\MessageSender.cs" />

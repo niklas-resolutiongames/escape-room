@@ -22,7 +22,9 @@ namespace RG.EscapeRoomServer.Server
 
         public void Receive(ClientConnectMessage message)
         {
+            logger.Info($"Received hello message, assigning player id {nextPlayerNetworkId}");
             messageSender.SendMessage(client, new ClientWelcomeMessage(nextPlayerNetworkId++));
+            logger.Info($"Asking client to load  {roomDefinition.roomDefinitionId}");
             messageSender.SendMessage(client, new LoadRoomMessage(roomDefinition.roomDefinitionId));
         }
 

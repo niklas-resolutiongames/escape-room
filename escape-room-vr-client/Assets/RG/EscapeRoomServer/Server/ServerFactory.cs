@@ -10,11 +10,13 @@ namespace RG.EscapeRoomServer.Server
     {
         private ILogger logger;
         private CancellationTokenSource cancellationTokenSource;
+        private readonly IRoomDefinitionParser roomDefinitionParser;
 
-        public ServerFactory(ILogger logger, CancellationTokenSource cancellationTokenSource)
+        public ServerFactory(ILogger logger, CancellationTokenSource cancellationTokenSource, IRoomDefinitionParser roomDefinitionParser)
         {
             this.logger = logger;
             this.cancellationTokenSource = cancellationTokenSource;
+            this.roomDefinitionParser = roomDefinitionParser;
         }
 
         public EscapeRoomSocketServer CreateServer(int port, string pathToRoomDefinition, int timeoutsUntilStop = 0)
@@ -24,7 +26,6 @@ namespace RG.EscapeRoomServer.Server
             var allConnectedClients = new HashSet<Client>();
             var udpMessageSender = new UdpMessageSender(socket, protocolSerializer, allConnectedClients);
             udpMessageSender.Init();
-            RoomDefinitionParser roomDefinitionParser = new RoomDefinitionParser();
             return new EscapeRoomSocketServer(port, pathToRoomDefinition, roomDefinitionParser, logger, cancellationTokenSource, protocolSerializer, udpMessageSender, timeoutsUntilStop, allConnectedClients);
 
         }

@@ -140,6 +140,7 @@ namespace RG.EscapeRoom.Wiring
         {
             clientNetworkConnectionHandler.Dispose();
         }
+
     }
 
     public class ReceivedNetworkStateData
